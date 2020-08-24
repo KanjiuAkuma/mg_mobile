@@ -15,6 +15,8 @@ import 'mg_exceptions.dart';
 /// MG endpoint url
 final String _mgUrl = 'https://kabedon.moongourd.com/api/mg';
 
+/// Client to access mg api
+/// Use [instance] to obtain an instance.
 class MGClient {
   final http.Client _httpClient = ioHttp.IOClient(HttpClient()..badCertificateCallback = (_, __, ___) => true);
 
@@ -31,4 +33,10 @@ class MGClient {
       request.parseResponseJson(json.decode(r.body)),
     );
   }
+
+  /* Singleton */
+
+  MGClient._();
+
+  static final MGClient instance = MGClient._();
 }
