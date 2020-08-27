@@ -7,34 +7,47 @@ import 'package:mg/models/models.dart' as Model;
 
 final String _endpoint = 'search';
 
-class Search extends MGRequest {
+class Search extends MGRequest<Model.LogParty> {
   final Model.Boss boss;
+  final String region, characterName, server;
+  final bool searchForGuild, sortByDps;
+  final int page;
+  final List<Model.LogParty> previousResults;
 
   Search._(String region, String characterName, Model.Boss boss, String server, bool searchForGuild, int page,
-      bool sortByDps)
+      bool sortByDps,
+      [List<Model.LogParty> previousResults])
       : boss = boss,
+        region = region,
+        characterName = characterName,
+        server = server,
+        searchForGuild = searchForGuild,
+        sortByDps = sortByDps,
+        page = page ?? 0,
+        previousResults = previousResults ?? [],
         super(_endpoint, {
-        'region': region,
-        'name': characterName,
-        if (page != null) 'page': page,
-        if (boss != null) 'zone': boss.zoneId,
-        if (boss != null) 'boss': boss.bossId,
-        if (boss != null) 'version': boss.version,
-        if (server != null) 'server': server,
-        if (searchForGuild) 'guild': 'guild',
-        if (sortByDps) 'sort': 'dps'
-      });
+          'region': region,
+          'name': characterName,
+          if (page != null) 'page': page,
+          if (boss != null) 'zone': boss.zoneId,
+          if (boss != null) 'boss': boss.bossId,
+          if (boss != null) 'version': boss.version,
+          if (server != null) 'server': server,
+          if (searchForGuild) 'guild': 'guild',
+          if (sortByDps) 'sort': 'dps'
+        });
 
-  factory Search(String region,
-      String characterName, {
-        int zoneId,
-        int bossId,
-        int version,
-        String server,
-        bool searchForGuild = false,
-        int page,
-        bool sortByDps = false,
-      }) {
+  factory Search(
+    String region,
+    String characterName, {
+    int zoneId,
+    int bossId,
+    int version,
+    String server,
+    bool searchForGuild = false,
+    int page,
+    bool sortByDps = false,
+  }) {
     if (zoneId == null || bossId == null || version == null) {
       assert(zoneId == null && bossId == null && version == null, 'Only one of zoneId, bossId, version is set');
     }
@@ -49,14 +62,15 @@ class Search extends MGRequest {
     );
   }
 
-  factory Search.fromBoss(String region,
-      String characterName,
-      Model.Boss boss, {
-        String server,
-        bool searchForGuild = false,
-        int page,
-        bool sortByDps = false,
-      }) {
+  factory Search.fromBoss(
+    String region,
+    String characterName,
+    Model.Boss boss, {
+    String server,
+    bool searchForGuild = false,
+    int page,
+    bool sortByDps = false,
+  }) {
     return Search._(
       region,
       characterName,
@@ -68,6 +82,19 @@ class Search extends MGRequest {
     );
   }
 
+  factory Search.fetchMore(Search previous, List<Model.LogParty> results) {
+    return Search._(
+      previous.region,
+      previous.characterName,
+      previous.boss,
+      previous.server,
+      previous.searchForGuild,
+      previous.page + 1,
+      previous.sortByDps,
+      results,
+    );
+  }
+
   @override
   List<Model.LogParty> parseResponseJson(List<dynamic> responseJson) {
     if (0 == responseJson.length || 0 == responseJson[0]['count']) {
@@ -75,7 +102,7 @@ class Search extends MGRequest {
       return [];
     }
 
-    List<Model.LogParty> logs = [];
+    List<Model.LogParty> logs = previousResults;
 
     responseJson = responseJson[1];
 
@@ -87,15 +114,14 @@ class Search extends MGRequest {
 
     if (boss == null) {
       append = (e) => logs.add(Model.LogParty.fromJson(e));
-    }
-    else {
+    } else {
       append = (e) => logs.add(Model.LogParty.fromJsonAndBoss(boss, e));
     }
 
     for (int i = 1; i < responseJson.length; i++) {
       Map<String, dynamic> entry = responseJson[i];
 
-      if (logId != entry ['logId']) {
+      if (logId != entry['logId']) {
         append(entries);
         logId = entry['logId'];
         entries = [];

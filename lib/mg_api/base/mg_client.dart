@@ -20,13 +20,13 @@ final String _mgUrl = 'https://kabedon.moongourd.com/api/mg';
 class MGClient {
   final http.Client _httpClient = ioHttp.IOClient(HttpClient()..badCertificateCallback = (_, __, ___) => true);
 
-  Future<MGResponse> get(MGRequest request) async {
+  Future<MGResponse<T>> get<T>(MGRequest<T> request) async {
     http.Response r = await _httpClient.get('$_mgUrl/${request.build()}');
     if (r.statusCode != 200) {
       throw MGBadResponseCode(r);
     }
 
-    return MGResponse(
+    return MGResponse<T>(
       request,
       ResponseStatus.fromHttpResponse(r),
       r.body,

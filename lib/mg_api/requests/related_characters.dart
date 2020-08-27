@@ -7,7 +7,7 @@ import 'package:mg/models/models.dart' as Model;
 
 String _endpoint = 'related_characters';
 
-class RelatedCharacters extends MGRequest {
+class RelatedCharacters extends MGRequest<Model.Character> {
   RelatedCharacters(String region, String characterName, [String server])
       : super(_endpoint, {
           'region': region,

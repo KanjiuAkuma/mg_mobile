@@ -7,7 +7,7 @@ import 'package:mg/models/models.dart' as Model;
 
 final String _endpoint = 'ranking_clears';
 
-class RankingClears extends MGRequest {
+class RankingClears<T> extends MGRequest<T> {
   final Model.Boss boss;
 
   RankingClears(String region, int zoneId, int bossId, int version, String server, bool chars)
@@ -33,7 +33,7 @@ class RankingClears extends MGRequest {
       });
 }
 
-class RankingClearsUsers extends RankingClears {
+class RankingClearsUsers extends RankingClears<Model.RankingUser> {
 
   RankingClearsUsers(String region, int zoneId, int bossId, int version, [String server])
     : super(region, zoneId, bossId, version, server, false);
@@ -42,7 +42,7 @@ class RankingClearsUsers extends RankingClears {
     : super.fromBoss(region, boss, server, false);
 
   @override
-  List parseResponseJson(List responseJson) {
+  List<Model.RankingUser> parseResponseJson(List<dynamic> responseJson) {
     if (0 == responseJson.length) {
       print('Warning: No results returned for $this');
       return [];
@@ -75,7 +75,7 @@ class RankingClearsUsers extends RankingClears {
   }
 }
 
-class RankingClearsCharacters extends RankingClears {
+class RankingClearsCharacters extends RankingClears<Model.RankingCharacter> {
 
   RankingClearsCharacters(String region, int zoneId, int bossId, int version, [String server])
       : super(region, zoneId, bossId, version, server, true);

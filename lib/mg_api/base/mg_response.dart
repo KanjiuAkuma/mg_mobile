@@ -5,16 +5,16 @@
 import 'mg_request.dart';
 import 'response_status.dart';
 
-class MGResponse extends Iterable<Map<String, dynamic>> {
-  final MGRequest _request;
+class MGResponse<T> extends Iterable<T> {
+  final MGRequest<T> _request;
   final ResponseStatus _status;
   final String _rawResponse;
-  final List<dynamic> _data;
+  final List<T> _data;
 
   MGResponse(this._request, this._status, this._rawResponse, this._data);
 
   /// The requests this response originated from
-  MGRequest get request {
+  MGRequest<T> get request {
     return _request;
   }
 
@@ -29,12 +29,12 @@ class MGResponse extends Iterable<Map<String, dynamic>> {
   }
 
   /// Parsed response json
-  List<dynamic> get data {
+  List<T> get data {
     return _data;
   }
 
   @override
-  Iterator<Map<String, dynamic>> get iterator => _data.iterator;
+  Iterator<T> get iterator => _data.iterator;
 
   @override
   String toString() {

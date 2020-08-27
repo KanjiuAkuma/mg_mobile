@@ -7,7 +7,7 @@ import 'package:mg/models/models.dart' as Model;
 
 String _endpoint = 'ranking_class';
 
-class RankingClass extends MGRequest {
+class RankingClass extends MGRequest<Model.LogCharacter> {
   RankingClass._(String region, Map<String, dynamic> parameters)
       : super(_endpoint, parameters..['region'] = region);
 

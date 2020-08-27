@@ -2,14 +2,14 @@
 /// Created by Kanjiu Akuma on 8/22/2020.
 ///
 
-class MGRequest {
+class MGRequest<T> {
   final String _apiEndpoint;
   final Map<String, dynamic> _parameters;
 
   MGRequest(this._apiEndpoint, this._parameters);
 
   /// Hook to modify response json before returning
-  List<dynamic> parseResponseJson(List<dynamic> responseJson) {
+  List<T> parseResponseJson(List<dynamic> responseJson) {
     return responseJson;
   }
 

@@ -7,7 +7,7 @@ import 'package:mg/models/models.dart' as Model;
 
 final String _endpoint = 'upload_recent';
 
-class UploadRecent extends MGRequest {
+class UploadRecent extends MGRequest<Model.LogParty> {
   UploadRecent(String region) : super(_endpoint, {'region': region});
 
   @override
