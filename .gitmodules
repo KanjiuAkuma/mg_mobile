@@ -1,0 +1,3 @@
+[submodule "util/TeraDpsMeterData"]
+	path = util/TeraDpsMeterData
+	url = git@github.com:neowutran/TeraDpsMeterData.git
