@@ -2,71 +2,34 @@
 /// Created by Kanjiu Akuma on 8/22/2020.
 ///
 
-import 'package:mg/mg_api/base/mg_client.dart';
-import 'package:mg/mg_api/base/mg_response.dart';
-import 'package:mg/mg_api/requests/requests.dart' as MGRequest;
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mg/mg_app.dart';
 
-import 'models/models.dart' as Model;
+import 'bloc/locale/locale_bloc.dart';
+import 'repositories/repository_locale.dart';
+
+import 'bloc/settings/settings_bloc.dart';
 
 void main() async {
-  MGClient client = MGClient();
+  WidgetsFlutterBinding.ensureInitialized();
 
-  /* test requests */
-  final Model.Boss boss = Model.Boss(3102, 1000, 1);
-  final String region = 'eu';
+  final String appLocale = 'en';
+  final RepositoryLocale repositoryLocale = RepositoryLocale();
+  await repositoryLocale.loadData(appLocale);
 
-  // ranking 24 hours: EU
-  {
-    MGResponse r = await client.get(MGRequest.Ranking24Hour(region));
-    print(r);
-  }
-
-
-  // ranking class: Commander Kalligar, EU
-  {
-    MGResponse r = await client.get(MGRequest.RankingClass.fromBoss(region, MGRequest.PlayerRole.DPS, boss));
-    print(r);
-  }
-
-  // ranking party: Commander Kalligar, EU
-  {
-    MGResponse r = await client.get(MGRequest.RankingParty.fromBoss(region, boss));
-    print(r);
-  }
-
-  // ranking user: Commander Kalligar, EU
-  {
-    MGResponse r = await client.get(MGRequest.RankingClearsUsers.fromBoss(region, boss));
-    print(r);
-  }
-
-  // ranking characters: Commander Kalligar, EU
-  {
-    MGResponse r = await client.get(MGRequest.RankingClearsCharacters.fromBoss(region, boss));
-    print(r);
-  }
-
-  // related characters: EU
-  {
-    MGResponse r = await client.get(MGRequest.RelatedCharacters(region, 'Kami-Kaze'));
-    print(r);
-  }
-
-  // search: Kami-Kaze, EU
-  {
-    MGResponse r = await client.get(MGRequest.Search(region, 'Kami-Kaze'));
-    print(r);
-  }
-
-  // upload recent: EU
-  {
-    MGResponse r = await client.get(MGRequest.UploadRecent(region));
-    print(r);
-  }
-
-  // verification restricted
-  {
-    MGResponse r = await client.get(MGRequest.VerificationRestricted());
-    print(r);
-  }
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<SettingsBloc>(
+        create: (_) => SettingsBloc(),
+      ),
+      BlocProvider<LocaleBloc>(
+        create: (_) => LocaleBloc(repositoryLocale),
+      )
+    ],
+    child: RepositoryProvider<RepositoryLocale>(
+      create: (_) => repositoryLocale,
+      child: MgApp(),
+    ),
+  ));
 }

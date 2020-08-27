@@ -4,10 +4,13 @@
 
 import 'package:flutter/material.dart';
 
-class PlayerSearch extends StatelessWidget {
+import '../views/search/search.dart' as ViewsSearch;
+
+class Search extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Search'));
+    return ViewsSearch.PlayerSearch();
   }
 
 }

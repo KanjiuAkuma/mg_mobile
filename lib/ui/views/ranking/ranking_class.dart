@@ -4,10 +4,9 @@
 
 import 'package:flutter/material.dart';
 
-class PlayerSearch extends StatelessWidget {
+class RankingClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Search'));
+    return Center(child: Text('Class Rankings'));
   }
-
 }

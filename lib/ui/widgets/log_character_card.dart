@@ -1,0 +1,117 @@
+///
+/// Created by Kanjiu Akuma on 8/27/2020.
+///
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../theme.dart' as MgTheme;
+
+import '../../repositories/repository_locale.dart';
+import '../../data/data.dart' as Mg;
+
+import '../../models/models.dart' as Model;
+
+class LogCharacterCard extends StatelessWidget {
+  final Model.LogCharacter _log;
+
+  const LogCharacterCard(this._log, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Mg.Locale locale = RepositoryProvider.of<RepositoryLocale>(context).locale;
+
+    return Card(
+      color: MgTheme.Background.logPartyCard,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  // '${locale.formatZoneId(log.boss)}: ${locale.formatBossId(log.boss)}',
+                  '${locale.formatBossId(_log.boss)}',
+                  textAlign: TextAlign.center,
+                  style: MgTheme.Text.title,
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                if (_log.timestamp != null)
+                  Text(
+                    '${locale.formatDateAndTime(_log.timestamp)}',
+                    style: MgTheme.Text.normal,
+                  ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Class icon
+                ImageIcon(
+                  AssetImage('assets/icons/classes/${_log.character.clazz.toLowerCase()}.png'),
+                  color: _log.character.color ?? MgTheme.Foreground.classIcon,
+                  size: 40,
+                ),
+                // Character name, server and guild
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${_log.character.name}',
+                      style: MgTheme.Text.title.copyWith(color: _log.character.color),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        if (_log.character.guild != null)
+                          Text(
+                            '${_log.character.guild}',
+                            style: MgTheme.Text.normal,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '${_log.character.server}',
+                          style: MgTheme.Text.normal,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                // Character dps
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (_log.fightDuration != null)
+                      Text(
+                        'Fight duration: ${locale.formatFightDuration(_log.fightDuration)}',
+                        style: MgTheme.Text.normal,
+                      ),
+                    Text(
+                      'Dps: ${locale.formatDps(_log.dps)}/s',
+                      style: MgTheme.Text.normal,
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
