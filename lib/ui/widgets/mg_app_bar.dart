@@ -26,7 +26,7 @@ class MgAppBar extends StatelessWidget implements PreferredSizeWidget {
     return BlocBuilder<RegionBloc, RegionState>(
       builder: (context, state) => AppBar(
         backgroundColor: MgTheme.Background.appBar,
-        title: Text('mg/${regions[state.region]}'),
+        title: Text('mg/${regions[state.region]['name']}'),
         actions: [
           DropdownButton<String>(
             value: state.region,
