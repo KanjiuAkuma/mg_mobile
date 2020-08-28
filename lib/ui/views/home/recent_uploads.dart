@@ -34,31 +34,35 @@ class _RecentUploadsState extends State<RecentUploads> {
   }
 
   Widget _buildError(Requests.UploadRecent request, String err) {
-    return GestureDetector(
-      onTap: () => BlocProvider.of<RequestBloc<Requests.UploadRecent>>(context)
-          .add(RequestEvent<Requests.UploadRecent>(request)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Something went wrong.',
-            style: MgTheme.Text.normal,
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-            err,
-            style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-            'Tap to retry',
-            style: MgTheme.Text.normal,
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: GestureDetector(
+        onTap: () => BlocProvider.of<RequestBloc<Requests.UploadRecent>>(context)
+            .add(RequestEvent<Requests.UploadRecent>(request)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Something went wrong.',
+              style: MgTheme.Text.normal,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              err,
+              style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
+              softWrap: true,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              'Tap to retry',
+              style: MgTheme.Text.normal,
+            ),
+          ],
+        ),
       ),
     );
   }
