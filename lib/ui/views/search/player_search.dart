@@ -36,7 +36,7 @@ class _PlayerSearchState extends State<PlayerSearch> {
     }
   }
 
-  Widget _buildError(Requests.Search request) {
+  Widget _buildError(Requests.Search request, String err) {
     return GestureDetector(
       onTap: () => BlocProvider.of<RequestBloc<Requests.Search>>(context).add(RequestEvent<Requests.Search>(request)),
       child: Column(
@@ -45,6 +45,13 @@ class _PlayerSearchState extends State<PlayerSearch> {
           Text(
             'Something went wrong.',
             style: MgTheme.Text.normal,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            err,
+            style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
           ),
           SizedBox(
             height: 15,
@@ -137,8 +144,10 @@ class _PlayerSearchState extends State<PlayerSearch> {
                 isFetchingMore = false;
                 return _buildLoaded(state.response.data, state.request);
               } else {
-                assert(state is RequestErrorState<Requests.Search>, 'Unknown state $state!');
-                return _buildError(state.request);
+                if (state is RequestErrorState<Requests.Search>) {
+                  return _buildError(state.request, state.error);
+                }
+                return _buildError(state.request, 'Unknown error');
               }
             },
           ),

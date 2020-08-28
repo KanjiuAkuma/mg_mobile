@@ -31,5 +31,7 @@ class RequestLoadedState<T extends MGRequest> extends RequestState<T> {
 }
 
 class RequestErrorState<T extends MGRequest> extends RequestState<T> {
-  RequestErrorState(T request, RequestLoadedState<T> previousComplete) : super(request, previousComplete);
+  final String error;
+
+  RequestErrorState(this.error, T request, RequestLoadedState<T> previousComplete) : super(request, previousComplete);
 }

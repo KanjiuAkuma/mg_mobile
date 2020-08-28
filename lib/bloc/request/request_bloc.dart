@@ -27,7 +27,7 @@ class RequestBloc<T extends MGRequest> extends Bloc<RequestEvent<T>, RequestStat
     } catch (err) {
       // failed
       print(err);
-      yield RequestErrorState<T>(event.request, currentState is RequestLoadedState ? currentState : null);
+      yield RequestErrorState<T>(err.toString(), event.request, currentState is RequestLoadedState ? currentState : null);
     }
   }
 }

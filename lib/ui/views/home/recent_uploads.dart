@@ -33,15 +33,23 @@ class _RecentUploadsState extends State<RecentUploads> {
     }
   }
 
-  Widget _buildError(Requests.UploadRecent request) {
+  Widget _buildError(Requests.UploadRecent request, String err) {
     return GestureDetector(
-      onTap: () => BlocProvider.of<RequestBloc<Requests.UploadRecent>>(context).add(RequestEvent<Requests.UploadRecent>(request)),
+      onTap: () => BlocProvider.of<RequestBloc<Requests.UploadRecent>>(context)
+          .add(RequestEvent<Requests.UploadRecent>(request)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'Something went wrong.',
             style: MgTheme.Text.normal,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            err,
+            style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
           ),
           SizedBox(
             height: 15,
@@ -100,8 +108,10 @@ class _RecentUploadsState extends State<RecentUploads> {
           } else if (state is RequestLoadedState<Requests.UploadRecent>) {
             return _buildLoaded(state.response.data);
           } else {
-            assert(state is RequestErrorState<Requests.UploadRecent>, 'Unknown state $state!');
-            return _buildError(state.request);
+            if (state is RequestErrorState<Requests.UploadRecent>) {
+              return _buildError(state.request, state.error);
+            }
+            return _buildError(state.request, 'Unknown error');
           }
         },
       ),

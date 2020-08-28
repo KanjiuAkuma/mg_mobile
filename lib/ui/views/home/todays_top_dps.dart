@@ -33,7 +33,7 @@ class _TodaysTopDpsState extends State<TodaysTopDps> {
     }
   }
 
-  Widget _buildError(Requests.Ranking24Hour request) {
+  Widget _buildError(Requests.Ranking24Hour request, String err) {
     return GestureDetector(
       onTap: () => BlocProvider.of<RequestBloc<Requests.Ranking24Hour>>(context).add(RequestEvent<Requests.Ranking24Hour>(request)),
       child: Column(
@@ -42,6 +42,13 @@ class _TodaysTopDpsState extends State<TodaysTopDps> {
           Text(
             'Something went wrong.',
             style: MgTheme.Text.normal,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            err,
+            style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
           ),
           SizedBox(
             height: 15,
@@ -100,8 +107,10 @@ class _TodaysTopDpsState extends State<TodaysTopDps> {
           } else if (state is RequestLoadedState<Requests.Ranking24Hour>) {
             return _buildLoaded(state.response.data);
           } else {
-            assert(state is RequestErrorState<Requests.Ranking24Hour>, 'Unknown state $state!');
-            return _buildError(state.request);
+            if (state is RequestErrorState<Requests.Ranking24Hour>) {
+              return _buildError(state.request, state.error);
+            }
+            return _buildError(state.request, 'Unknown error');
           }
         },
       ),
