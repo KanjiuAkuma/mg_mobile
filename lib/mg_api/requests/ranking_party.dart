@@ -10,7 +10,7 @@ String _endpoint = 'ranking_party';
 class RankingParty extends MGRequest<Model.LogParty> {
   RankingParty._(String region, Map<String, dynamic> parameters) : super(_endpoint, parameters..['region'] = region);
 
-  factory RankingParty(String region, int zoneId, int bossId, int version,
+  factory RankingParty(String region, int version, String zoneId, String bossId,
       [String server, bool multiHeal = false, multiTank = false, String span]) {
     return RankingParty._(region, {
       'zone': zoneId,
@@ -25,7 +25,7 @@ class RankingParty extends MGRequest<Model.LogParty> {
 
   factory RankingParty.fromBoss(String region, Model.Boss boss,
       [String server, bool multiHeal = false, multiTank = false, String span]) {
-    return RankingParty(region, boss.zoneId, boss.bossId, boss.version, server, multiHeal, multiTank, span);
+    return RankingParty(region, boss.version, boss.zoneId, boss.bossId, server, multiHeal, multiTank, span);
   }
 
   @override

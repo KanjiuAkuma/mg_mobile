@@ -11,7 +11,7 @@ class RankingClass extends MGRequest<Model.LogCharacter> {
   RankingClass._(String region, Map<String, dynamic> parameters)
       : super(_endpoint, parameters..['region'] = region);
 
-  factory RankingClass(String region, int playerRole, int zoneId, int bossId, int version,
+  factory RankingClass(String region, int playerRole, int version, String zoneId, String bossId,
       [String server, bool multiHeal = false, multiTank = false, int typeTank, int typeHeal, String span]) {
     return RankingClass._(region, {
       'zone': zoneId,
@@ -32,9 +32,9 @@ class RankingClass extends MGRequest<Model.LogCharacter> {
     return RankingClass(
       region,
       playerRole,
+      boss.version,
       boss.zoneId,
       boss.bossId,
-      boss.version,
       server,
       multiHeal,
       multiTank,

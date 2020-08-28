@@ -31,18 +31,18 @@ class Search extends MGRequest<Model.LogParty> {
           if (page != null) 'page': page,
           if (boss != null) 'zone': boss.zoneId,
           if (boss != null) 'boss': boss.bossId,
-          if (boss != null) 'version': boss.version,
+          if (boss != null) 'ver': boss.version,
           if (server != null) 'server': server,
-          if (searchForGuild) 'guild': 'guild',
+          if (searchForGuild) 'type': 'guild',
           if (sortByDps) 'sort': 'dps'
         });
 
   factory Search(
     String region,
     String characterName, {
-    int zoneId,
-    int bossId,
     int version,
+    String zoneId,
+    String bossId,
     String server,
     bool searchForGuild = false,
     int page,
@@ -54,7 +54,7 @@ class Search extends MGRequest<Model.LogParty> {
     return Search._(
       region,
       characterName,
-      zoneId != null ? Model.Boss(zoneId, bossId, version) : null,
+      zoneId != null ? Model.Boss(version, zoneId, bossId) : null,
       server,
       searchForGuild,
       page,
@@ -80,6 +80,10 @@ class Search extends MGRequest<Model.LogParty> {
       page,
       sortByDps,
     );
+  }
+
+  Search copyWith({int page}) {
+    return Search._(region, characterName, boss, server, searchForGuild, page ?? this.page, sortByDps);
   }
 
   factory Search.fetchMore(Search previous, List<Model.LogParty> results) {

@@ -10,8 +10,8 @@ final String _endpoint = 'ranking_clears';
 class RankingClears<T> extends MGRequest<T> {
   final Model.Boss boss;
 
-  RankingClears(String region, int zoneId, int bossId, int version, String server, bool chars)
-      : boss = Model.Boss(zoneId, bossId, version),
+  RankingClears(String region, int version, String zoneId, String bossId, String server, bool chars)
+      : boss = Model.Boss(version, zoneId, bossId),
         super(_endpoint, {
           'region': region,
           'zone': zoneId,
@@ -35,8 +35,8 @@ class RankingClears<T> extends MGRequest<T> {
 
 class RankingClearsUsers extends RankingClears<Model.RankingUser> {
 
-  RankingClearsUsers(String region, int zoneId, int bossId, int version, [String server])
-    : super(region, zoneId, bossId, version, server, false);
+  RankingClearsUsers(String region, int version, String zoneId, String bossId, [String server])
+    : super(region, version, zoneId, bossId, server, false);
 
   RankingClearsUsers.fromBoss(String region, Model.Boss boss, [String server])
     : super.fromBoss(region, boss, server, false);
@@ -77,8 +77,8 @@ class RankingClearsUsers extends RankingClears<Model.RankingUser> {
 
 class RankingClearsCharacters extends RankingClears<Model.RankingCharacter> {
 
-  RankingClearsCharacters(String region, int zoneId, int bossId, int version, [String server])
-      : super(region, zoneId, bossId, version, server, true);
+  RankingClearsCharacters(String region, int version, String zoneId, String bossId, [String server])
+      : super(region, version, zoneId, bossId, server, true);
 
   RankingClearsCharacters.fromBoss(String region, Model.Boss boss, [String server])
       : super.fromBoss(region, boss, server, true);
