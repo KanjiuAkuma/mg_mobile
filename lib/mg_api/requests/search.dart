@@ -13,6 +13,7 @@ class Search extends MGRequest<Model.LogParty> {
   final bool searchForGuild, sortByDps;
   final int page;
   final List<Model.LogParty> previousResults;
+  bool hasMore;
 
   Search._(String region, String characterName, Model.Boss boss, String server, bool searchForGuild, int page,
       bool sortByDps,
@@ -87,6 +88,7 @@ class Search extends MGRequest<Model.LogParty> {
   }
 
   factory Search.fetchMore(Search previous, List<Model.LogParty> results) {
+    assert(previous.hasMore ?? false, 'Attempting to load more entries but there are none.');
     return Search._(
       previous.region,
       previous.characterName,
@@ -103,11 +105,13 @@ class Search extends MGRequest<Model.LogParty> {
   List<Model.LogParty> parseResponseJson(List<dynamic> responseJson) {
     if (0 == responseJson.length || 0 == responseJson[0]['count']) {
       print('Warning: No results returned for $this');
+      hasMore = false;
       return [];
     }
 
     List<Model.LogParty> logs = previousResults;
 
+    int totalCount = responseJson[0]['count'];
     responseJson = responseJson[1];
 
     // parse party batches
@@ -139,6 +143,7 @@ class Search extends MGRequest<Model.LogParty> {
       append(entries);
     }
 
+    hasMore = logs.length < totalCount;
     return logs;
   }
 }

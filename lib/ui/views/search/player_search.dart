@@ -28,8 +28,7 @@ class PlayerSearch extends StatefulWidget {
 }
 
 class _PlayerSearchState extends State<PlayerSearch> {
-  ScrollController _scrollController;
-  bool disposeLoadingIndicator;
+  bool disposeLoadingIndicator, isFetchingMore;
 
   Future<void> shouldDisposeLoadingIndicator() async {
     if (!disposeLoadingIndicator) {
@@ -79,9 +78,30 @@ class _PlayerSearchState extends State<PlayerSearch> {
             .add(RequestEvent<Requests.Search>(request.copyWith(page: 0)));
         return Future<void>(() => shouldDisposeLoadingIndicator());
       },
-      child: ListView(
-        controller: _scrollController,
-        children: logs.map((l) => LogPartyCard(l)).toList(),
+      child: ListView.builder(
+        itemCount: logs.length + (request.hasMore ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index < logs.length) {
+            return LogPartyCard(logs[index]);
+          } else {
+            if (!isFetchingMore) {
+              isFetchingMore = true;
+              BlocProvider.of<RequestBloc<Requests.Search>>(context)
+                  .add(RequestEvent<Requests.Search>(Requests.Search.fetchMore(request, logs)));
+            }
+            return Container(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: MgTheme.Background.appBar,
+                    valueColor: AlwaysStoppedAnimation<Color>(MgTheme.Foreground.accent),
+                  ),
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -89,7 +109,7 @@ class _PlayerSearchState extends State<PlayerSearch> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    isFetchingMore = false;
   }
 
   @override
@@ -114,6 +134,7 @@ class _PlayerSearchState extends State<PlayerSearch> {
               } else if (state is RequestLoadingState<Requests.Search>) {
                 return _buildLoading();
               } else if (state is RequestLoadedState<Requests.Search>) {
+                isFetchingMore = false;
                 return _buildLoaded(state.response.data, state.request);
               } else {
                 assert(state is RequestErrorState<Requests.Search>, 'Unknown state $state!');
@@ -295,43 +316,50 @@ class _SearchBarState extends State<SearchBar> {
                               child: Text('All'),
                             )),
                     ),
-                    Expanded(
+                    if (_zoneId == null)
+                      Expanded(
                       child: Container(),
                     ),
-                    SizedBox(
+                    if (_zoneId != null)
+                      SizedBox(
                       width: 15,
                     ),
                     if (_zoneId != null && locale.monsters[_zoneId]['monsters'].keys.length != 1)
-                      DropdownButton<String>(
-                        value: _bossId,
-                        style: MgTheme.Text.normal,
-                        dropdownColor: MgTheme.Background.appBar,
-                        onChanged: (bossId) {
-                          setState(() {
-                            _bossId = bossId;
-                          });
-                          if (_characterNameController.text.isEmpty) {
-                            _usernameNode.requestFocus();
-                          } else {
-                            _usernameNode.unfocus();
-                            _maybeSubmit();
-                          }
-                        },
-                        items: locale.monsters[_zoneId]['monsters'].keys.map<DropdownMenuItem<String>>((id) {
-                          return DropdownMenuItem<String>(
-                            value: id,
-                            child: Text(
-                              locale.monsters[_zoneId]['monsters'][id],
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        }).toList(),
+                      Expanded(
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          value: _bossId,
+                          style: MgTheme.Text.normal,
+                          dropdownColor: MgTheme.Background.appBar,
+                          onChanged: (bossId) {
+                            setState(() {
+                              _bossId = bossId;
+                            });
+                            if (_characterNameController.text.isEmpty) {
+                              _usernameNode.requestFocus();
+                            } else {
+                              _usernameNode.unfocus();
+                              _maybeSubmit();
+                            }
+                          },
+                          items: locale.monsters[_zoneId]['monsters'].keys.map<DropdownMenuItem<String>>((id) {
+                            return DropdownMenuItem<String>(
+                              value: id,
+                              child: Text(
+                                locale.monsters[_zoneId]['monsters'][id],
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     if (_zoneId != null && locale.monsters[_zoneId]['monsters'].keys.length == 1)
-                      Text(
-                        locale.monsters[_zoneId]['monsters'].values.first,
-                        style: MgTheme.Text.normal,
-                        overflow: TextOverflow.ellipsis,
+                      Expanded(
+                        child: Text(
+                          locale.monsters[_zoneId]['monsters'].values.first,
+                          style: MgTheme.Text.normal,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                   ],
                 ),
