@@ -23,10 +23,12 @@ class PlayerSearch extends StatefulWidget {
 }
 
 class _PlayerSearchState extends State<PlayerSearch> {
-  bool disposeLoadingIndicator, isFetchingMore;
+  bool _disposeLoadingIndicator, _isFetchingMore;
+  CharacterSearchBar _characterSearchBar;
+  ScrollController _scrollController;
 
   Future<void> shouldDisposeLoadingIndicator() async {
-    if (!disposeLoadingIndicator) {
+    if (!_disposeLoadingIndicator) {
       return Future<void>(() => shouldDisposeLoadingIndicator());
     }
   }
@@ -64,80 +66,91 @@ class _PlayerSearchState extends State<PlayerSearch> {
     return Center(child: CircularProgressIndicator());
   }
 
-  Widget _buildEmpty() {
-    return Center();
-  }
-
-  Widget _buildLoaded(List<Model.LogParty> logs, Requests.Search request) {
-    disposeLoadingIndicator = true;
-    return RefreshIndicator(
-      color: MgTheme.Foreground.accent,
-      backgroundColor: MgTheme.Background.appBar,
-      onRefresh: () async {
-        disposeLoadingIndicator = false;
-        // yield search again
-        BlocProvider.of<RequestBloc<Requests.Search>>(context)
-            .add(RequestEvent<Requests.Search>(request.copyWith(page: 0)));
-        return Future<void>(() => shouldDisposeLoadingIndicator());
-      },
-      child: ListView.builder(
-        itemCount: logs.length + (request.hasMore ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index < logs.length) {
-            return LogPartyCard(logs[index]);
-          } else {
-            if (!isFetchingMore) {
-              isFetchingMore = true;
-              BlocProvider.of<RequestBloc<Requests.Search>>(context)
-                  .add(RequestEvent<Requests.Search>(Requests.Search.fetchMore(request, logs)));
-            }
-            return Container(
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: MgTheme.Background.appBar,
-                    valueColor: AlwaysStoppedAnimation<Color>(MgTheme.Foreground.accent),
-                  ),
-                ),
-              ),
-            );
-          }
-        },
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
-    isFetchingMore = false;
+    _isFetchingMore = false;
+    _characterSearchBar = CharacterSearchBar();
+    _scrollController = ScrollController();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // search bar
-        CharacterSearchBar(),
-        SizedBox(
-          height: 10,
-        ),
-        // search results
-        Expanded(
-          child: BlocBuilder<RequestBloc<Requests.Search>, RequestState<Requests.Search>>(
-            buildWhen: (previous, current) {
-              return !(current is RequestLoadingState<Requests.Search> &&
-                  (current.request.page != 0 || current.previousComplete != null));
-            },
-            builder: (context, state) {
-              if (state is RequestNoneState<Requests.Search>) {
-                return _buildEmpty();
-              } else if (state is RequestLoadingState<Requests.Search>) {
+    return BlocBuilder<RequestBloc<Requests.Search>, RequestState<Requests.Search>>(
+      buildWhen: (previous, current) {
+        if (current is RequestLoadedState<Requests.Search>) {
+          if (current.request.page == 0) {
+            _scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.linear);
+          }
+        }
+        return !(current is RequestLoadingState<Requests.Search> &&
+            (current.request.page != 0 || current.previousComplete != null));
+      },
+      builder: (context, state) {
+        int itemCount = 0;
+        if (state is RequestLoadedState<Requests.Search>) {
+          _isFetchingMore = false;
+          _disposeLoadingIndicator = true;
+          itemCount = state.response.data.length + (state.request.hasMore ? 1 : 0);
+        }
+        else if (!(state is RequestNoneState<Requests.Search>)) {
+          itemCount = 1;
+        } else if (state is RequestLoadingState<Requests.Search>) {
+          return _buildLoading();
+        }
+
+        return RefreshIndicator(
+          color: MgTheme.Foreground.accent,
+          backgroundColor: MgTheme.Background.appBar,
+          onRefresh: () async {
+            if (!(state is RequestNoneState<Requests.Search>)) {
+              _disposeLoadingIndicator = false;
+              // yield search again
+              BlocProvider.of<RequestBloc<Requests.Search>>(context)
+                  .add(RequestEvent<Requests.Search>(state.request.copyWith(page: 0)));
+              return Future<void>(() => shouldDisposeLoadingIndicator());
+            }
+          },
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: 1 + itemCount,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Column(
+                  children: [
+                    // CharacterSearchBar(),
+                    _characterSearchBar,
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                );
+              }
+              index -= 1;
+              if (state is RequestLoadedState<Requests.Search>) {
+                if (index < state.response.data.length) {
+                  return LogPartyCard(state.response.data[index]);
+                } else {
+                  if (!_isFetchingMore) {
+                    _isFetchingMore = true;
+                    BlocProvider.of<RequestBloc<Requests.Search>>(context)
+                        .add(RequestEvent<Requests.Search>(Requests.Search.fetchMore(state.request, state.response.data)));
+                  }
+                  return Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: MgTheme.Background.appBar,
+                          valueColor: AlwaysStoppedAnimation<Color>(MgTheme.Foreground.accent),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              }
+              else if (state is RequestLoadingState<Requests.Search>) {
                 return _buildLoading();
-              } else if (state is RequestLoadedState<Requests.Search>) {
-                isFetchingMore = false;
-                return _buildLoaded(state.response.data, state.request);
               } else {
                 if (state is RequestErrorState<Requests.Search>) {
                   return _buildError(state.request, state.error);
@@ -146,8 +159,8 @@ class _PlayerSearchState extends State<PlayerSearch> {
               }
             },
           ),
-        )
-      ],
+        );
+      },
     );
   }
 }
