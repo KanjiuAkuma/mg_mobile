@@ -13,12 +13,16 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # use packages
   http: ^0.12.2
   flutter_bloc: ^6.0.1
   intl: ^0.16.1
 
   # iOS style icons.
   cupertino_icons: ^0.1.3
+
+  # app icon
+  flutter_launcher_icons: ^0.7.5
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +34,8 @@ flutter:
   assets:
     - assets/icons/classes/
     - assets/data/
+
+flutter_icons:
+  android: 'launcher_icon'
+  ios: true
+  image_path: 'assets/icons/app_icon/mg_mobile_icon.png'
