@@ -12,7 +12,6 @@ import '../../../bloc/request/request_event.dart';
 import '../../theme.dart' as MgTheme;
 
 import '../../../mg_api/requests/requests.dart' as Requests;
-import '../../../models/models.dart' as Model;
 
 import '../../widgets/character_search_bar.dart';
 import '../../widgets/log_party_card.dart';
@@ -78,7 +77,7 @@ class _PlayerSearchState extends State<PlayerSearch> {
   Widget build(BuildContext context) {
     return BlocBuilder<RequestBloc<Requests.Search>, RequestState<Requests.Search>>(
       buildWhen: (previous, current) {
-        if (current is RequestLoadedState<Requests.Search>) {
+        if (current is RequestLoadingState<Requests.Search>) {
           if (current.request.page == 0) {
             _scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.linear);
           }
