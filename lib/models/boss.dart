@@ -4,15 +4,16 @@
 
 /// MG api boss data wrapper
 class Boss {
-  final int zoneId, bossId, version;
+  final int version;
+  final String zoneId, bossId;
 
-  Boss(this.zoneId, this.bossId, this.version);
+  Boss(this.version, this.zoneId, this.bossId);
 
   factory Boss.fromJson(Map<String, dynamic> json) {
     return Boss(
-        json['zoneId'],
-        json['bossId'],
-        json['version'],
+      json['version'],
+      '${json['zoneId']}',
+      '${json['bossId']}',
     );
   }
 }

@@ -36,8 +36,8 @@ class Locale {
   }
 
   String formatBossId(Model.Boss boss) {
-    assert(boss.version == monsters['${boss.zoneId}']['version'], 'Boss version mismatch');
-    return monsters['${boss.zoneId}']['monsters']['${boss.bossId}'];
+    assert(boss.version == monsters[boss.zoneId]['version'], 'Boss version mismatch');
+    return monsters[boss.zoneId]['monsters'][boss.bossId];
   }
 
   String formatZoneId(Model.Boss boss) {
@@ -46,14 +46,14 @@ class Locale {
   }
 
   String formatDps(int dps) {
-    if (10e9 < dps) {
-      return (dps / 10e9).toStringAsFixed(2) + 'B/s';
+    if (1e9 < dps) {
+      return (dps / 1e9).toStringAsFixed(2) + 'B/s';
     }
-    else if (10e6 < dps) {
-      return (dps / 10e6).toStringAsFixed(2) + 'M/s';
+    else if (1e6 < dps) {
+      return (dps / 1e6).toStringAsFixed(2) + 'M/s';
     }
-    else if (10e3 < dps) {
-      return (dps / 10e3).toStringAsFixed(2) + 'k/s';
+    else if (1e3 < dps) {
+      return (dps / 1e3).toStringAsFixed(2) + 'k/s';
     }
     else {
       return '$dps/s';
@@ -64,7 +64,7 @@ class Locale {
     int seconds = fightDuration % 60;
     int minutes = fightDuration ~/ 60;
     if (minutes != 0) {
-      return '$minutes:$seconds';
+      return '$minutes:${seconds < 10 ? '0$seconds' : '$seconds'}';
     }
     return '$seconds sec';
   }
