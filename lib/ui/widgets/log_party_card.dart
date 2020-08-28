@@ -62,7 +62,7 @@ class _LogPartyCardState extends State<LogPartyCard> {
               child: Container(),
             ),
             Text(
-              'Party Dps: ${locale.formatDps(log.totalDps)}/s',
+              'Party Dps: ${locale.formatDps(log.totalDps)}',
               style: MgTheme.Text.normal,
             ),
           ],
@@ -82,17 +82,23 @@ class _LogPartyCardState extends State<LogPartyCard> {
       children: [
         // player icons
         Expanded(
-          child: Row(
-            children: log.characters
-                .map((c) => ImageIcon(
-                      AssetImage('assets/icons/classes/${c.clazz.toLowerCase()}.png'),
-                      color: c.color,
-                      size: 50,
-                    ))
-                .toList(),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: log.characters
+                  .map((c) => ImageIcon(
+                        AssetImage('assets/icons/classes/${c.clazz.toLowerCase()}.png'),
+                        color: c.color,
+                        size: 50,
+                      ))
+                  .toList(),
+            ),
           ),
         ),
         // log data
+        SizedBox(
+          width: 10,
+        ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -102,7 +108,7 @@ class _LogPartyCardState extends State<LogPartyCard> {
               style: MgTheme.Text.normal,
             ),
             Text(
-              'Party Dps: ${locale.formatDps(log.totalDps)}/s',
+              'Party Dps: ${locale.formatDps(log.totalDps)}',
               style: MgTheme.Text.normal,
             ),
           ],

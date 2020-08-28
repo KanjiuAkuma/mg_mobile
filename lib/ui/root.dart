@@ -3,19 +3,24 @@
 ///
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/request/request_bloc.dart';
+import '../bloc/request/request_state.dart';
+
+import '../mg_api/requests/requests.dart' as Requests;
 
 import 'widgets/mg_app_bar.dart';
+
 import 'pages/pages.dart' as Page;
 import 'theme.dart' as MgTheme;
 
 class ViewRoot extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => _ViewRootState();
-
 }
-class _ViewRootState extends State<ViewRoot> {
 
+class _ViewRootState extends State<ViewRoot> {
   int currentIndex = 0;
   List<Widget> _children = [
     Page.Home(),
@@ -30,7 +35,13 @@ class _ViewRootState extends State<ViewRoot> {
       home: Scaffold(
         appBar: MgAppBar(),
         backgroundColor: MgTheme.Background.global,
-        body: _children[currentIndex],
+        body: BlocListener<RequestBloc<Requests.Search>, RequestState<Requests.Search>>(
+          listenWhen: (previous, current) => currentIndex != 2,
+          listener: (context, state) {
+            setState(() => currentIndex = 2);
+          },
+          child: _children[currentIndex],
+        ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: MgTheme.Background.tabBar,
           selectedItemColor: MgTheme.Foreground.tabBarActive,
