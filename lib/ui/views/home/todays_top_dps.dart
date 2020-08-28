@@ -33,8 +33,26 @@ class _TodaysTopDpsState extends State<TodaysTopDps> {
     }
   }
 
-  Widget _buildError() {
-    return Center(child: Text('Something went wrong'));
+  Widget _buildError(Requests.Ranking24Hour request) {
+    return GestureDetector(
+      onTap: () => BlocProvider.of<RequestBloc<Requests.Ranking24Hour>>(context).add(RequestEvent<Requests.Ranking24Hour>(request)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Something went wrong.',
+            style: MgTheme.Text.normal,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            'Tap to retry',
+            style: MgTheme.Text.normal,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildLoading() {
@@ -83,7 +101,7 @@ class _TodaysTopDpsState extends State<TodaysTopDps> {
             return _buildLoaded(state.response.data);
           } else {
             assert(state is RequestErrorState<Requests.Ranking24Hour>, 'Unknown state $state!');
-            return _buildError();
+            return _buildError(state.request);
           }
         },
       ),

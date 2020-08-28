@@ -33,8 +33,26 @@ class _RecentUploadsState extends State<RecentUploads> {
     }
   }
 
-  Widget _buildError() {
-    return Center(child: Text('Something went wrong'));
+  Widget _buildError(Requests.UploadRecent request) {
+    return GestureDetector(
+      onTap: () => BlocProvider.of<RequestBloc<Requests.UploadRecent>>(context).add(RequestEvent<Requests.UploadRecent>(request)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Something went wrong.',
+            style: MgTheme.Text.normal,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            'Tap to retry',
+            style: MgTheme.Text.normal,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildLoading() {
@@ -83,7 +101,7 @@ class _RecentUploadsState extends State<RecentUploads> {
             return _buildLoaded(state.response.data);
           } else {
             assert(state is RequestErrorState<Requests.UploadRecent>, 'Unknown state $state!');
-            return _buildError();
+            return _buildError(state.request);
           }
         },
       ),
