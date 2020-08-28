@@ -20,18 +20,30 @@ final String _mgUrl = 'https://kabedon.moongourd.com/api/mg';
 class MGClient {
   final http.Client _httpClient = ioHttp.IOClient(HttpClient()..badCertificateCallback = (_, __, ___) => true);
 
-  Future<MGResponse<T>> get<T>(MGRequest<T> request) async {
-    http.Response r = await _httpClient.get('$_mgUrl/${request.build()}');
-    if (r.statusCode != 200) {
-      throw MGBadResponseCode(r);
+  Future<MGResponse<T>> get<T>(MGRequest<T> request, [int retries = 5]) async {
+    int tries = 0;
+    http.Response r;
+    var err;
+    while (tries < retries) {
+      try {
+        r = await _httpClient.get('$_mgUrl/${request.build()}');
+        if (r.statusCode != 200) {
+          throw MgBadResponseCode(r);
+        }
+        return MGResponse<T>(
+          request,
+          ResponseStatus.fromHttpResponse(r),
+          r.body,
+          request.parseResponseJson(json.decode(r.body)),
+        );
+      } catch (e) {
+        err = e;
+      }
+      tries ++;
     }
 
-    return MGResponse<T>(
-      request,
-      ResponseStatus.fromHttpResponse(r),
-      r.body,
-      request.parseResponseJson(json.decode(r.body)),
-    );
+    assert (err != null, 'Error and/or response was null after $tries retries but nothing returned!');
+    throw MgMaxRetriesExceeded(retries, err, r);
   }
 
   /* Singleton */

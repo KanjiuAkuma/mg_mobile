@@ -43,23 +43,19 @@ class _RecentUploadsState extends State<RecentUploads> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Something went wrong.',
+              'Something went wrong, Tap to retry:',
               style: MgTheme.Text.normal,
             ),
             SizedBox(
               height: 15,
             ),
-            Text(
-              err,
-              style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
-              softWrap: true,
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-              'Tap to retry',
-              style: MgTheme.Text.normal,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Text(
+                err,
+                style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
+                softWrap: true,
+              ),
             ),
           ],
         ),
