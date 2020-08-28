@@ -23,7 +23,11 @@ class RequestLoadingState<T extends MGRequest> extends RequestState<T> {
 class RequestLoadedState<T extends MGRequest> extends RequestState<T> {
   final MGResponse response;
 
-  RequestLoadedState(this.response, T request, RequestLoadedState<T> previousComplete) : super(request, previousComplete);
+  RequestLoadedState(this.response, T request, RequestLoadedState<T> previousComplete) : super(request, previousComplete?.copyWithoutPrevious());
+
+  RequestLoadedState<T> copyWithoutPrevious() {
+    return RequestLoadedState<T>(this.response, this.request, null);
+  }
 }
 
 class RequestErrorState<T extends MGRequest> extends RequestState<T> {
