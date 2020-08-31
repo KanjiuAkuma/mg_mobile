@@ -8,10 +8,17 @@ import '../theme.dart' as MgTheme;
 
 import '../widgets/mg_tab.dart';
 
+
+/// Yes yes, its unnecessary but i hate warnings! >.<
+class _Index {
+  int value = 0;
+}
+
 class MgPage extends StatefulWidget {
   final List<MgTab> tabs;
+  final _Index index = _Index();
 
-  const MgPage({Key key, this.tabs}) : super(key: key);
+  MgPage({Key key, this.tabs}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _MgPageState();
@@ -26,7 +33,10 @@ class _MgPageState extends State<MgPage> with SingleTickerProviderStateMixin {
     _tabController = TabController(
       length: widget.tabs.length,
       vsync: this,
-    );
+      initialIndex: widget.index.value,
+    )..addListener(() {
+      widget.index.value = _tabController.index;
+    });
   }
 
   @override

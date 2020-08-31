@@ -43,7 +43,6 @@ class _ViewRootState extends State<ViewRoot> {
         appBar: MgAppBar(),
         backgroundColor: MgTheme.Background.global,
         body: BlocListener<RequestBloc<Requests.Search>, RequestState<Requests.Search>>(
-          // listenWhen: (previous, current) => currentIndex != 2,
           listener: (context, state) {
             _children[2] = Page.Search(state.request);
             setState(() => currentIndex = 2);
