@@ -34,7 +34,7 @@ class CharacterSearchBar extends StatefulWidget implements RequestFactory<Reques
   }
 
   @override
-  State<StatefulWidget> createState() => _CharacterSearchBarState();
+  State<StatefulWidget> createState() => _State();
 
   @override
   Requests.Search createRequest(String region) {
@@ -61,57 +61,12 @@ class _SearchBarData {
   String characterName = '';
 }
 
-class _CharacterSearchBarState extends State<CharacterSearchBar> {
+class _State extends State<CharacterSearchBar> {
   TextEditingController _characterNameController;
   final FocusNode _usernameNode = FocusNode();
 
-  String get characterName {
-    return widget.data.characterName;
-  }
-  set characterName(String characterName) {
-    widget.data.characterName = characterName;
-  }
-
-  bool get searchGuild {
-    return widget.data.searchGuild;
-  }
-  set searchGuild(bool searchGuild) {
-    widget.data.searchGuild = searchGuild;
-  }
-
-  bool get sortDps {
-    return widget.data.sortDps;
-  }
-  set sortDps(bool sortDps) {
-    widget.data.sortDps = sortDps;
-  }
-
-  int get version {
-    return widget.data.version;
-  }
-  set version(int version) {
-    widget.data.version = version;
-  }
-
-  String get bossId {
-    return widget.data.bossId;
-  }
-  set bossId(String bossId) {
-    widget.data.bossId = bossId;
-  }
-
-  String get zoneId {
-    return widget.data.zoneId;
-  }
-  set zoneId(String zoneId) {
-    widget.data.zoneId = zoneId;
-  }
-
-  String get server {
-    return widget.data.server;
-  }
-  set server(String server) {
-    widget.data.server = server;
+  _SearchBarData get data {
+    return widget.data;
   }
 
   @override
@@ -119,9 +74,9 @@ class _CharacterSearchBarState extends State<CharacterSearchBar> {
     super.initState();
     _characterNameController = TextEditingController()
       ..addListener(() {
-        characterName = _characterNameController.text;
+        data.characterName = _characterNameController.text;
       });
-    _characterNameController.text = characterName;
+    _characterNameController.text = data.characterName;
   }
 
   void _maybeSubmit() {
@@ -171,14 +126,13 @@ class _CharacterSearchBarState extends State<CharacterSearchBar> {
                 DropdownButton<String>(
                   onChanged: (server) {
                     setState(() {
-                      server = server;
+                      data.server = server;
                     });
                     _maybeSubmit();
                   },
                   style: MgTheme.Text.normal,
                   dropdownColor: MgTheme.Background.appBar,
-                  underline: Container(),
-                  value: server,
+                  value: data.server,
                   items: Mg.regions[BlocProvider.of<RegionBloc>(context).region]['servers']
                       .map<DropdownMenuItem<String>>((s) {
                     return DropdownMenuItem<String>(
@@ -193,7 +147,7 @@ class _CharacterSearchBarState extends State<CharacterSearchBar> {
                             0,
                             DropdownMenuItem<String>(
                               value: null,
-                              child: Text('All'),
+                              child: Text('Any Server'),
                             )),
                 ),
               ],
@@ -206,18 +160,17 @@ class _CharacterSearchBarState extends State<CharacterSearchBar> {
                 DropdownButton<String>(
                   onChanged: (zoneId) {
                     setState(() {
-                      this.zoneId = zoneId;
-                      version = zoneId == null ? null : locale.monsters[zoneId]['version'];
-                      bossId = zoneId == null ? null : locale.monsters[zoneId]['monsters'].keys.first;
+                      data.zoneId = zoneId;
+                      data.version = zoneId == null ? null : locale.monsters[zoneId]['version'];
+                      data.bossId = zoneId == null ? null : locale.monsters[zoneId]['monsters'].keys.first;
                     });
 
                     // maybe submit intelligently
                     _maybeSubmit();
                   },
-                  value: zoneId,
+                  value: data.zoneId,
                   style: MgTheme.Text.normal,
                   dropdownColor: MgTheme.Background.appBar,
-                  underline: Container(),
                   items: locale.monsters.keys.map((id) {
                     return DropdownMenuItem<String>(
                       value: id,
@@ -231,27 +184,27 @@ class _CharacterSearchBarState extends State<CharacterSearchBar> {
                         0,
                         DropdownMenuItem<String>(
                           value: null,
-                          child: Text('All'),
+                          child: Text('Any Boss'),
                         )),
                 ),
-                if (zoneId == null)
+                if (data.zoneId == null)
                   Expanded(
                     child: Container(),
                   ),
-                if (zoneId != null)
+                if (data.zoneId != null)
                   SizedBox(
                     width: 15,
                   ),
-                if (zoneId != null && locale.monsters[zoneId]['monsters'].keys.length != 1)
+                if (data.zoneId != null && locale.monsters[data.zoneId]['monsters'].keys.length != 1)
                   Expanded(
                     child: DropdownButton<String>(
                       isExpanded: true,
-                      value: bossId,
+                      value: data.bossId,
                       style: MgTheme.Text.normal,
                       dropdownColor: MgTheme.Background.appBar,
                       onChanged: (bossId) {
                         setState(() {
-                          bossId = bossId;
+                          data.bossId = bossId;
                         });
                         if (_characterNameController.text.isEmpty) {
                           _usernameNode.requestFocus();
@@ -260,21 +213,21 @@ class _CharacterSearchBarState extends State<CharacterSearchBar> {
                           _maybeSubmit();
                         }
                       },
-                      items: locale.monsters[zoneId]['monsters'].keys.map<DropdownMenuItem<String>>((id) {
+                      items: locale.monsters[data.zoneId]['monsters'].keys.map<DropdownMenuItem<String>>((id) {
                         return DropdownMenuItem<String>(
                           value: id,
                           child: Text(
-                            locale.monsters[zoneId]['monsters'][id],
+                            locale.monsters[data.zoneId]['monsters'][id],
                             overflow: TextOverflow.ellipsis,
                           ),
                         );
                       }).toList(),
                     ),
                   ),
-                if (zoneId != null && locale.monsters[zoneId]['monsters'].keys.length == 1)
+                if (data.zoneId != null && locale.monsters[data.zoneId]['monsters'].keys.length == 1)
                   Expanded(
                     child: Text(
-                      locale.monsters[zoneId]['monsters'].values.first,
+                      locale.monsters[data.zoneId]['monsters'].values.first,
                       style: MgTheme.Text.normal,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -290,10 +243,10 @@ class _CharacterSearchBarState extends State<CharacterSearchBar> {
                 Row(
                   children: [
                     Checkbox(
-                      value: sortDps,
+                      value: data.sortDps,
                       onChanged: (sortDps) {
                         setState(() {
-                          sortDps = sortDps;
+                          data.sortDps = sortDps;
                         });
                         _maybeSubmit();
                       },
@@ -310,10 +263,10 @@ class _CharacterSearchBarState extends State<CharacterSearchBar> {
                 Row(
                   children: [
                     Checkbox(
-                      value: searchGuild,
+                      value: data.searchGuild,
                       onChanged: (searchGuild) {
                         setState(() {
-                          searchGuild = searchGuild;
+                          data.searchGuild = searchGuild;
                         });
                         _maybeSubmit();
                       },

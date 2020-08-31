@@ -7,3 +7,4 @@ library mg_data;
 export 'locale.dart';
 export 'regions.dart';
 export 'settings.dart';
+export 'enums.dart';

@@ -22,7 +22,7 @@ class Ranking extends StatelessWidget {
         MgTab(
           name: 'Class',
           // icon: Icon(Icons.format_list_numbered),
-          widget: ViewsRanking.RankingClass(),
+          widget: ViewsRanking.RankingClass(null),
         ),
         MgTab(
           name: 'Party',

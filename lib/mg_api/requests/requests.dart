@@ -4,7 +4,6 @@
 
 library mg_requests;
 
-export 'enums.dart';
 export 'ranking_24_hour.dart';
 export 'ranking_class.dart';
 export 'ranking_clears.dart';

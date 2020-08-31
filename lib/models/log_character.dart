@@ -25,4 +25,15 @@ class LogCharacter {
       Character.fromJson(json),
     );
   }
+
+  factory LogCharacter.fromJsonAndBoss(Boss boss, Map<String, dynamic> json) {
+    return LogCharacter(
+      json['logId'],
+      boss,
+      json.containsKey('timestamp') ? DateTime.fromMillisecondsSinceEpoch(json['timestamp'] * 1000) : null,
+      json['playerDps'],
+      json['fightDuration'],
+      Character.fromJson(json),
+    );
+  }
 }
