@@ -10,12 +10,10 @@ import '../../../bloc/request/request_bloc.dart';
 import '../../../bloc/request/request_event.dart';
 
 import '../../../bloc/region/region_bloc.dart';
-
 import '../../../repositories/repository_locale.dart';
+
 import '../../../data/data.dart' as Mg;
-
 import '../../../models/models.dart' as Model;
-
 import '../../theme.dart' as MgTheme;
 
 class LogCharacterCard extends StatelessWidget {

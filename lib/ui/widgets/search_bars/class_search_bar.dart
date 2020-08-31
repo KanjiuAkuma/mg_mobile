@@ -314,7 +314,7 @@ class _State extends State<ClassSearchBar> {
                     });
                     _maybeSubmit();
                   },
-                )
+                ),
               ],
             ),
             SizedBox(

@@ -3,14 +3,15 @@
 ///
 
 import '../base/mg_request.dart';
-import 'package:mg/models/models.dart' as Model;
+import '../../models/models.dart' as Model;
 
 final String _endpoint = 'ranking_clears';
 
 class RankingClears<T> extends MgRequest<T> {
   final Model.Boss boss;
+  final String server;
 
-  RankingClears(String region, int version, String zoneId, String bossId, String server, bool chars)
+  RankingClears(String region, int version, String zoneId, String bossId, this.server, bool chars)
       : boss = Model.Boss(version, zoneId, bossId),
         super(_endpoint, {
           'region': region,
@@ -21,7 +22,7 @@ class RankingClears<T> extends MgRequest<T> {
           if (chars) 'char': 0,
         });
 
-  RankingClears.fromBoss(String region, Model.Boss boss, String server, bool chars) :
+  RankingClears.fromBoss(String region, Model.Boss boss, this.server, bool chars) :
       boss = boss,
       super(_endpoint, {
         'region': region,
@@ -33,22 +34,22 @@ class RankingClears<T> extends MgRequest<T> {
       });
 }
 
-class RankingClearsUsers extends RankingClears<Model.RankingUser> {
+class RankingClearsAccount extends RankingClears<Model.RankingAccount> {
 
-  RankingClearsUsers(String region, int version, String zoneId, String bossId, [String server])
+  RankingClearsAccount(String region, int version, String zoneId, String bossId, [String server])
     : super(region, version, zoneId, bossId, server, false);
 
-  RankingClearsUsers.fromBoss(String region, Model.Boss boss, [String server])
+  RankingClearsAccount.fromBoss(String region, Model.Boss boss, [String server])
     : super.fromBoss(region, boss, server, false);
 
   @override
-  List<Model.RankingUser> parseResponseJson(List<dynamic> responseJson) {
+  List<Model.RankingAccount> parseResponseJson(List<dynamic> responseJson) {
     if (0 == responseJson.length) {
       print('Warning: No results returned for $this');
       return [];
     }
 
-    List<Model.RankingUser> ranking = [];
+    List<Model.RankingAccount> ranking = [];
 
     // parse user batches
     String userId = responseJson[0]['userId'];
@@ -58,7 +59,7 @@ class RankingClearsUsers extends RankingClears<Model.RankingUser> {
       Map<String, dynamic> entry = responseJson[i];
 
       if (userId != entry ['userId']) {
-        ranking.add(Model.RankingUser.fromJson(boss, entries));
+        ranking.add(Model.RankingAccount.fromJson(ranking.length + 1, entries));
         userId = entry['userId'];
         entries = [];
       }
@@ -68,7 +69,7 @@ class RankingClearsUsers extends RankingClears<Model.RankingUser> {
 
     // append last batch
     if (0 < entries.length) {
-      ranking.add(Model.RankingUser.fromJson(boss, entries));
+      ranking.add(Model.RankingAccount.fromJson(ranking.length + 1, entries));
     }
 
     return ranking;
@@ -85,7 +86,11 @@ class RankingClearsCharacters extends RankingClears<Model.RankingCharacter> {
 
   @override
   List<Model.RankingCharacter> parseResponseJson(List<dynamic> responseJson) {
-    return responseJson.map((e) => Model.RankingCharacter.fromJson(boss, e)).toList();
+    List<Model.RankingCharacter> ranking = [];
+    for (int i = 0; i < responseJson.length; i++) {
+      ranking.add(Model.RankingCharacter.fromJson(i + 1, responseJson[i]));
+    }
+    return ranking;
   }
 
 }

@@ -13,7 +13,7 @@ class Ranking extends MgPage {
           MgTab(
             name: 'Boss',
             // icon: Icon(Icons.list),
-            widget: ViewsRanking.RankingClears(),
+            widget: ViewsRanking.RankingClears(null),
           ),
           MgTab(
             name: 'Class',

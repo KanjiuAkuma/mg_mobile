@@ -97,7 +97,7 @@ class _LogPartyCardState extends State<LogPartyCard> {
         ),
         // log data
         SizedBox(
-          width: 10,
+          width: 15,
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
