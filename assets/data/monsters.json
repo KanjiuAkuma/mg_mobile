@@ -1,4 +1,18 @@
 {
+  "3203": {
+    "version": 1,
+    "name": "Forbidden Arena (Hard)",
+    "monsters": {
+      "1000": "Nightmare Undying Warlord"
+    }
+  },
+  "3103": {
+    "version": 1,
+    "name": "Forbidden Arena",
+    "monsters": {
+      "1000": "Undying Warlord"
+    }
+  },
   "3034": {
     "version": 1,
     "name": "Rampaging RK-9 Kennel",
