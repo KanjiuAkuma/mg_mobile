@@ -4,6 +4,6 @@
 
 library view_ranking;
 
-export 'ranking_boss.dart';
+export 'ranking_clears.dart';
 export 'ranking_class.dart';
 export 'ranking_party.dart';

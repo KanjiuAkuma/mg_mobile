@@ -4,7 +4,7 @@
 
 import 'package:flutter/material.dart';
 
-class RankingBoss extends StatelessWidget {
+class RankingClears extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(child: Text('Boss Rankings'));

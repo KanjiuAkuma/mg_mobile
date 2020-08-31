@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import '../../../mg_api/requests/requests.dart' as Requests;
 import '../../../models/models.dart' as Model;
 
-import '../../widgets/character_search_bar.dart';
-import '../../widgets/log_party_card.dart';
+import '../../widgets/search_bars/character_search_bar.dart';
+import '../../widgets/cards/log_party_card.dart';
 import '../mg_view_state.dart';
 
 class PlayerSearch extends StatefulWidget {

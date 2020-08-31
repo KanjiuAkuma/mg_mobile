@@ -8,8 +8,8 @@ import '../../../mg_api/requests/requests.dart' as Requests;
 import '../../../models/models.dart' as Model;
 
 import '../mg_view_state.dart';
-import '../../widgets/log_character_card.dart';
-import '../../widgets/class_search_bar.dart';
+import '../../widgets/cards/log_character_card.dart';
+import '../../widgets/search_bars/class_search_bar.dart';
 
 class RankingClass extends StatefulWidget {
 

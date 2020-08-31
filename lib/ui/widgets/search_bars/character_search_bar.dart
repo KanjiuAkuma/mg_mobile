@@ -5,18 +5,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/region/region_bloc.dart';
+import '../../../bloc/region/region_bloc.dart';
 
-import '../../bloc/request/request_bloc.dart';
-import '../../bloc/request/request_event.dart';
+import '../../../bloc/request/request_bloc.dart';
+import '../../../bloc/request/request_event.dart';
 
-import '../../data/data.dart' as Mg;
-import '../theme.dart' as MgTheme;
-import '../../mg_api/requests/requests.dart' as Requests;
+import '../../../data/data.dart' as Mg;
+import '../../theme.dart' as MgTheme;
+import '../../../mg_api/requests/requests.dart' as Requests;
 
-import '../../repositories/repository_locale.dart';
+import '../../../repositories/repository_locale.dart';
 
-import '../views/mg_view_state.dart';
+import '../../views/mg_view_state.dart';
 
 class CharacterSearchBar extends StatefulWidget implements RequestFactory<Requests.Search> {
   final _SearchBarData data = _SearchBarData();

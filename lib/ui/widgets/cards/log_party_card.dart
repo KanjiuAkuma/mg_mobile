@@ -5,12 +5,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../theme.dart' as MgTheme;
+import '../../theme.dart' as MgTheme;
 
-import '../../repositories/repository_locale.dart';
-import '../../data/data.dart' as Mg;
+import '../../../repositories/repository_locale.dart';
+import '../../../data/data.dart' as Mg;
 
-import '../../models/models.dart' as Model;
+import '../../../models/models.dart' as Model;
 
 import 'character_card.dart';
 

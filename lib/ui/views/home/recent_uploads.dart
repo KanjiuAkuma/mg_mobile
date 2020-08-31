@@ -8,7 +8,7 @@ import '../../../mg_api/requests/requests.dart' as Requests;
 import '../../../models/models.dart' as Model;
 
 import '../mg_view_state.dart';
-import '../../widgets/log_party_card.dart';
+import '../../widgets/cards/log_party_card.dart';
 
 class RecentUploads extends StatefulWidget {
   @override

@@ -5,18 +5,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../mg_api/requests/requests.dart' as Requests;
-import '../../bloc/request/request_bloc.dart';
-import '../../bloc/request/request_event.dart';
+import '../../../mg_api/requests/requests.dart' as Requests;
+import '../../../bloc/request/request_bloc.dart';
+import '../../../bloc/request/request_event.dart';
 
-import '../../bloc/region/region_bloc.dart';
+import '../../../bloc/region/region_bloc.dart';
 
-import '../../repositories/repository_locale.dart';
-import '../../data/data.dart' as Mg;
+import '../../../repositories/repository_locale.dart';
+import '../../../data/data.dart' as Mg;
 
-import '../../models/models.dart' as Model;
+import '../../../models/models.dart' as Model;
 
-import '../theme.dart' as MgTheme;
+import '../../theme.dart' as MgTheme;
 
 class LogCharacterCard extends StatelessWidget {
   final Model.LogCharacter _log;

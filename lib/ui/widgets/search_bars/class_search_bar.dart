@@ -5,16 +5,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/region/region_bloc.dart';
-import '../../bloc/request/request_bloc.dart';
-import '../../bloc/request/request_event.dart';
-import '../../repositories/repository_locale.dart';
+import '../../../bloc/region/region_bloc.dart';
+import '../../../bloc/request/request_bloc.dart';
+import '../../../bloc/request/request_event.dart';
+import '../../../repositories/repository_locale.dart';
 
-import '../../data/data.dart' as Mg;
-import '../theme.dart' as MgTheme;
-import '../../mg_api/requests/requests.dart' as Requests;
+import '../../../data/data.dart' as Mg;
+import '../../theme.dart' as MgTheme;
+import '../../../mg_api/requests/requests.dart' as Requests;
 
-import '../views/mg_view_state.dart';
+import '../../views/mg_view_state.dart';
 
 class ClassSearchBar extends StatefulWidget implements RequestFactory<Requests.RankingClass> {
   final _SearchBarData data = _SearchBarData();
