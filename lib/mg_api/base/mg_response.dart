@@ -6,7 +6,7 @@ import 'mg_request.dart';
 import 'response_status.dart';
 
 class MGResponse<T> extends Iterable<T> {
-  final MGRequest<T> _request;
+  final MgRequest<T> _request;
   final ResponseStatus _status;
   final String _rawResponse;
   final List<T> _data;
@@ -14,7 +14,7 @@ class MGResponse<T> extends Iterable<T> {
   MGResponse(this._request, this._status, this._rawResponse, this._data);
 
   /// The requests this response originated from
-  MGRequest<T> get request {
+  MgRequest<T> get request {
     return _request;
   }
 

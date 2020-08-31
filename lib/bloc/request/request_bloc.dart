@@ -10,7 +10,7 @@ import '../../mg_api/base/mg_client.dart';
 import 'request_event.dart';
 import 'request_state.dart';
 
-class RequestBloc<T extends MGRequest> extends Bloc<RequestEvent<T>, RequestState<T>> {
+class RequestBloc<T extends MgRequest> extends Bloc<RequestEvent<T>, RequestState<T>> {
   final MGClient client = MGClient.instance;
 
   RequestBloc() : super(RequestNoneState<T>(null));

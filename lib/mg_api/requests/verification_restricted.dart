@@ -7,7 +7,7 @@ import 'package:mg/models/models.dart' as Model;
 
 final String _endpoint = 'verification_restricted';
 
-class VerificationRestricted extends MGRequest<Model.Character> {
+class VerificationRestricted extends MgRequest<Model.Character> {
   VerificationRestricted() : super(_endpoint, {});
 
   @override

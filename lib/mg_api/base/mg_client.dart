@@ -20,7 +20,8 @@ final String _mgUrl = 'https://kabedon.moongourd.com/api/mg';
 class MGClient {
   final http.Client _httpClient = ioHttp.IOClient(HttpClient()..badCertificateCallback = (_, __, ___) => true);
 
-  Future<MGResponse<T>> get<T>(MGRequest<T> request, [int retries = 5]) async {
+  Future<MGResponse<T>> get<T>(MgRequest<T> request, [int retries = 5]) async {
+    print('MgClient::get($request, retries=$retries');
     int tries = 0;
     http.Response r;
     var err;

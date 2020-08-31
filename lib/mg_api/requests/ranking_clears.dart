@@ -7,7 +7,7 @@ import 'package:mg/models/models.dart' as Model;
 
 final String _endpoint = 'ranking_clears';
 
-class RankingClears<T> extends MGRequest<T> {
+class RankingClears<T> extends MgRequest<T> {
   final Model.Boss boss;
 
   RankingClears(String region, int version, String zoneId, String bossId, String server, bool chars)

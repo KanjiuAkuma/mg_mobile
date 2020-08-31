@@ -7,7 +7,7 @@ import 'package:mg/models/models.dart' as Model;
 
 String _endpoint = 'ranking_party';
 
-class RankingParty extends MGRequest<Model.LogParty> {
+class RankingParty extends MgRequest<Model.LogParty> {
   RankingParty._(String region, Map<String, dynamic> parameters) : super(_endpoint, parameters..['region'] = region);
 
   factory RankingParty(String region, int version, String zoneId, String bossId,

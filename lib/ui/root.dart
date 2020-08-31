@@ -22,11 +22,18 @@ class ViewRoot extends StatefulWidget {
 
 class _ViewRootState extends State<ViewRoot> {
   int currentIndex = 0;
-  List<Widget> _children = [
-    Page.Home(),
-    Page.Ranking(),
-    Page.Search(),
-  ];
+
+  List<Widget> _children;
+
+  @override
+  void initState() {
+    super.initState();
+    _children = [
+      Page.Home(),
+      Page.Ranking(),
+      Page.Search(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +43,9 @@ class _ViewRootState extends State<ViewRoot> {
         appBar: MgAppBar(),
         backgroundColor: MgTheme.Background.global,
         body: BlocListener<RequestBloc<Requests.Search>, RequestState<Requests.Search>>(
-          listenWhen: (previous, current) => currentIndex != 2,
+          // listenWhen: (previous, current) => currentIndex != 2,
           listener: (context, state) {
+            _children[2] = Page.Search(state.request);
             setState(() => currentIndex = 2);
           },
           child: _children[currentIndex],

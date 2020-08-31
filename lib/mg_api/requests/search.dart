@@ -7,7 +7,7 @@ import 'package:mg/models/models.dart' as Model;
 
 final String _endpoint = 'search';
 
-class Search extends MGRequest<Model.LogParty> {
+class Search extends MgRequest<Model.LogParty> {
   final Model.Boss boss;
   final String region, characterName, server;
   final bool searchForGuild, sortByDps;

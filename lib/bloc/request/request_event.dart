@@ -4,7 +4,7 @@
 
 import '../../mg_api/base/mg_request.dart';
 
-class RequestEvent<T extends MGRequest> {
+class RequestEvent<T extends MgRequest> {
   final T request;
 
   RequestEvent(this.request);

@@ -36,7 +36,7 @@ class Locale {
   }
 
   String formatBossId(Model.Boss boss) {
-    assert(boss.version == monsters[boss.zoneId]['version'], 'Boss version mismatch');
+    assert(monsters.containsKey(boss.zoneId) && boss.version == monsters[boss.zoneId]['version'], 'Boss version mismatch');
     return monsters[boss.zoneId]['monsters'][boss.bossId];
   }
 
