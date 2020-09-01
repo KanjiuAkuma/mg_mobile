@@ -99,7 +99,7 @@ class CharacterCard extends StatelessWidget {
               // Character dps
               Text(
                 locale.formatDps(_characterDps),
-                style: MgTheme.Text.normal,
+                style: MgTheme.Text.dps,
               ),
             ],
           ),

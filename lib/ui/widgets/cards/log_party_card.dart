@@ -28,13 +28,11 @@ class PartyCard extends StatefulWidget {
   PartyCard(this._log, this._title, {Key key}) : super(key: key);
 
   PartyCard.log(this._log, String bossName, {Key key})
-      : _title = Text(bossName,
-            style: MgTheme.Text.title),
+      : _title = Text(bossName, style: MgTheme.Text.title, overflow: TextOverflow.ellipsis),
         super(key: key);
 
   PartyCard.ranking(this._log, int rank, {Key key})
-      : _title = Text('#$rank',
-            style: MgTheme.Text.title.copyWith(fontSize: 25)),
+      : _title = Text('#$rank', style: MgTheme.Text.title.copyWith(fontSize: 25), overflow: TextOverflow.ellipsis),
         super(key: key);
 
   @override
@@ -67,14 +65,14 @@ class _PartyCardState extends State<PartyCard> {
           children: [
             Text(
               'Fight duration: ${locale.formatFightDuration(log.fightDuration)}',
-              style: MgTheme.Text.normal,
+              style: MgTheme.Text.fightDuration,
             ),
             Expanded(
               child: Container(),
             ),
             Text(
               'Party Dps: ${locale.formatDps(log.totalDps)}',
-              style: MgTheme.Text.normal,
+              style: MgTheme.Text.dps,
             ),
           ],
         ),
@@ -116,11 +114,11 @@ class _PartyCardState extends State<PartyCard> {
           children: [
             Text(
               'Fight duration: ${locale.formatFightDuration(log.fightDuration)}',
-              style: MgTheme.Text.normal,
+              style: MgTheme.Text.fightDuration,
             ),
             Text(
               'Party Dps: ${locale.formatDps(log.totalDps)}',
-              style: MgTheme.Text.normal,
+              style: MgTheme.Text.dps,
             ),
           ],
         )
@@ -145,13 +143,12 @@ class _PartyCardState extends State<PartyCard> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  widget._title,
                   Expanded(
-                    child: Container(),
+                    child: widget._title,
                   ),
                   Text(
                     '${locale.formatDateAndTime(log.timestamp)}',
-                    style: MgTheme.Text.normal,
+                    style: MgTheme.Text.uploadTime,
                   ),
                 ],
               ),

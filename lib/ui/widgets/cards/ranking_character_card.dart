@@ -78,7 +78,7 @@ class RankingCharacterCard extends StatelessWidget {
               ),
               Text(
                 '${_ranking.runs} Clear${_ranking.runs == 1 ? '' : 's'}',
-                style: MgTheme.Text.normal,
+                style: MgTheme.Text.clears,
               ),
             ],
           ),

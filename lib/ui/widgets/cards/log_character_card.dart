@@ -23,15 +23,12 @@ class CharacterCard extends StatelessWidget {
   CharacterCard(this._log, this._title, {Key key}) : super(key: key);
 
   CharacterCard.log(this._log, String bossName, {Key key})
-      : _title = Text(bossName,
-      style: MgTheme.Text.title),
+      : _title = Text(bossName, style: MgTheme.Text.title, overflow: TextOverflow.ellipsis),
         super(key: key);
 
   CharacterCard.ranking(this._log, int rank, {Key key})
-      : _title = Text('#$rank',
-      style: MgTheme.Text.title.copyWith(fontSize: 25)),
+      : _title = Text('#$rank', style: MgTheme.Text.title.copyWith(fontSize: 25), overflow: TextOverflow.ellipsis),
         super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +37,13 @@ class CharacterCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // search for tapped character
-      if (_log.character.name.replaceAll('*', '').isNotEmpty) {
-        BlocProvider.of<RequestBloc<Requests.Search>>(context).add(RequestEvent<Requests.Search>(Requests.Search(
-          BlocProvider
-              .of<RegionBloc>(context)
-              .region,
-          _log.character.name,
-          server: _log.character.server,
-        )));
-      }
+        if (_log.character.name.replaceAll('*', '').isNotEmpty) {
+          BlocProvider.of<RequestBloc<Requests.Search>>(context).add(RequestEvent<Requests.Search>(Requests.Search(
+            BlocProvider.of<RegionBloc>(context).region,
+            _log.character.name,
+            server: _log.character.server,
+          )));
+        }
       },
       child: Card(
         color: MgTheme.Background.logPartyCard,
@@ -60,14 +55,13 @@ class CharacterCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _title,
                   Expanded(
-                    child: Container(),
+                    child: _title,
                   ),
                   if (_log.timestamp != null)
                     Text(
                       '${locale.formatDateAndTime(_log.timestamp)}',
-                      style: MgTheme.Text.normal,
+                      style: MgTheme.Text.uploadTime,
                     ),
                 ],
               ),
@@ -134,11 +128,11 @@ class CharacterCard extends StatelessWidget {
                       if (_log.fightDuration != null)
                         Text(
                           'Fight duration: ${locale.formatFightDuration(_log.fightDuration)}',
-                          style: MgTheme.Text.normal,
+                          style: MgTheme.Text.fightDuration,
                         ),
                       Text(
                         'Dps: ${locale.formatDps(_log.dps)}/s',
-                        style: MgTheme.Text.normal,
+                        style: MgTheme.Text.dps,
                       ),
                     ],
                   )

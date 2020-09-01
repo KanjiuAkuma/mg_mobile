@@ -28,8 +28,16 @@ class Locale {
   String formatDateAndTime(DateTime date) {
     DateTime now = DateTime.now();
     if (date.day == now.day && date.month == now.month && date.year == now.year) {
-      // is today return only time
-      return formatTime(date);
+      DateTime justNow = DateTime.now().subtract(Duration(minutes: 1));
+      if (justNow.difference(date).isNegative) {
+        return 'Just now';
+      }
+      return 'Today: ${formatTime(date)}';
+    }
+
+    DateTime yesterday = DateTime.now().subtract(Duration(days: 1));
+    if (date.day == yesterday.day && date.month == yesterday.month && date.year == yesterday.year) {
+      return 'Yesterday: ${formatTime(date)}';
     }
 
     return '${formatDate(date)}: ${formatTime(date)}';

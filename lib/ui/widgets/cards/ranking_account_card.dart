@@ -89,8 +89,8 @@ class _State extends State<RankingAccountCard> {
                           height: 5,
                         ),
                         Text(
-                          '${r.runs} clears',
-                          style: MgTheme.Text.normal.copyWith(fontSize: 15),
+                          '${r.runs} Clear${r.runs == 1 ? '' : 's'}',
+                          style: MgTheme.Text.clears.copyWith(fontSize: 15),
                         )
                       ],
                     ),
@@ -110,7 +110,7 @@ class _State extends State<RankingAccountCard> {
           children: [
             Text(
               '${ranking.totalRuns} Clear${ranking.totalRuns == 1 ? '' : 's'}',
-              style: MgTheme.Text.normal,
+              style: MgTheme.Text.clears,
             ),
             SizedBox(
               height: 5,
@@ -137,7 +137,7 @@ class _State extends State<RankingAccountCard> {
             ),
             Text(
               '${ranking.totalRuns} Clear${ranking.totalRuns == 1 ? '' : 's'}',
-              style: MgTheme.Text.normal,
+              style: MgTheme.Text.clears,
             ),
             Text(
               '${ranking.characterRuns.length} Char${ranking.characterRuns.length == 1 ? '' : 's'}',
@@ -193,8 +193,8 @@ class _State extends State<RankingAccountCard> {
                         child: Container(),
                       ),
                       Text(
-                        '${r.runs} clears',
-                        style: MgTheme.Text.normal.copyWith(fontSize: 15),
+                        '${r.runs} Clear${r.runs == 1 ? '' : 's'}',
+                        style: MgTheme.Text.clears.copyWith(fontSize: 15),
                       ),
                     ],
                   ),
