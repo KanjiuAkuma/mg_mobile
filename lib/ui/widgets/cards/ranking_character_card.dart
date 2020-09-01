@@ -23,11 +23,15 @@ class RankingCharacterCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // search for tapped character
-        BlocProvider.of<RequestBloc<Requests.Search>>(context).add(RequestEvent<Requests.Search>(Requests.Search(
-          BlocProvider.of<RegionBloc>(context).region,
-          _ranking.character.name,
-          server: _ranking.character.server,
-        )));
+        if (_ranking.character.name.replaceAll('*', '').isNotEmpty) {
+          BlocProvider.of<RequestBloc<Requests.Search>>(context).add(RequestEvent<Requests.Search>(Requests.Search(
+            BlocProvider
+                .of<RegionBloc>(context)
+                .region,
+            _ranking.character.name,
+            server: _ranking.character.server,
+          )));
+        }
       },
       child: Card(
         color: MgTheme.Background.logPartyCard,

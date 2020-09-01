@@ -41,7 +41,7 @@ class Boss extends StatelessWidget {
         ZoneId(
           _zoneId,
           (v) {
-            _callback(_zoneId == null
+            _callback(v == null
                 ? null
                 : Model.Boss(
                     locale.monsters[v]['version'],

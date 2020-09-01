@@ -30,11 +30,15 @@ class CharacterCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // search for tapped character
+      if (_character.name.replaceAll('*', '').isNotEmpty) {
         BlocProvider.of<RequestBloc<Requests.Search>>(context).add(RequestEvent<Requests.Search>(Requests.Search(
-          BlocProvider.of<RegionBloc>(context).region,
+          BlocProvider
+              .of<RegionBloc>(context)
+              .region,
           _character.name,
           server: _character.server,
         )));
+      }
       },
       child: Card(
         color: MgTheme.Background.playerCard,
