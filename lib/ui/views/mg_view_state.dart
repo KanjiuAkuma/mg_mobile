@@ -45,7 +45,7 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
   }
 
   /// To be overwritten
-  Widget buildItem(T item);
+  Widget buildItem(T item, int index);
 
   /// Default implementation for build error
   Widget buildError(R request, String err) {
@@ -105,7 +105,7 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
           index--;
         }
 
-        return buildItem(logs[index]);
+        return buildItem(logs[index], index);
       },
     );
   }

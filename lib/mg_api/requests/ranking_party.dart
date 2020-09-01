@@ -7,7 +7,7 @@ import 'package:mg/models/models.dart' as Model;
 
 String _endpoint = 'ranking_party';
 
-class RankingParty extends MgRequest<Model.RankingParty> {
+class RankingParty extends MgRequest<Model.LogParty> {
   final String region, server, span;
   final Model.Boss boss;
   final bool multiHeal, multiTank;
@@ -36,13 +36,13 @@ class RankingParty extends MgRequest<Model.RankingParty> {
   }
 
   @override
-  List<Model.RankingParty> parseResponseJson(List<dynamic> responseJson) {
+  List<Model.LogParty> parseResponseJson(List<dynamic> responseJson) {
     if (0 == responseJson.length) {
       print('Warning: No results returned for $this');
       return [];
     }
 
-    List<Model.RankingParty> rankings = [];
+    List<Model.LogParty> rankings = [];
 
     // parse party batches
     String logId = responseJson[0]['logId'];
@@ -52,7 +52,7 @@ class RankingParty extends MgRequest<Model.RankingParty> {
       Map<String, dynamic> entry = responseJson[i];
 
       if (logId != entry['logId']) {
-        rankings.add(Model.RankingParty.fromJson(rankings.length + 1, entries));
+        rankings.add(Model.LogParty.fromJsonAndBoss(boss, entries));
         logId = entry['logId'];
         entries = [];
       }
@@ -62,7 +62,7 @@ class RankingParty extends MgRequest<Model.RankingParty> {
 
     // append last batch
     if (0 < entries.length) {
-      rankings.add(Model.RankingParty.fromJson(rankings.length + 1, entries));
+      rankings.add(Model.LogParty.fromJsonAndBoss(boss, entries));
     }
 
     return rankings;

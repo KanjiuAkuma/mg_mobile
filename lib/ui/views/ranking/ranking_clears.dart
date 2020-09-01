@@ -29,7 +29,7 @@ class _State extends MgViewState<RankingClears, dynamic, Requests.RankingClears>
   _State(ClearsSearchBar searchBar): super(header: searchBar, requestFactory: searchBar);
 
   @override
-  Widget buildItem(dynamic item) {
+  Widget buildItem(dynamic item, _) {
     if (item is Model.RankingCharacter) {
       return RankingCharacterCard(item);
     }

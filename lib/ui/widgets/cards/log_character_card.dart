@@ -16,10 +16,22 @@ import '../../../data/data.dart' as Mg;
 import '../../../models/models.dart' as Model;
 import '../../theme.dart' as MgTheme;
 
-class LogCharacterCard extends StatelessWidget {
+class CharacterCard extends StatelessWidget {
   final Model.LogCharacter _log;
+  final Widget _title;
 
-  const LogCharacterCard(this._log, {Key key}) : super(key: key);
+  CharacterCard(this._log, this._title, {Key key}) : super(key: key);
+
+  CharacterCard.log(this._log, String bossName, {Key key})
+      : _title = Text(bossName,
+      style: MgTheme.Text.title),
+        super(key: key);
+
+  CharacterCard.ranking(this._log, int rank, {Key key})
+      : _title = Text('#$rank',
+      style: MgTheme.Text.title.copyWith(fontSize: 25)),
+        super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +56,7 @@ class LogCharacterCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    // '${locale.formatZoneId(log.boss)}: ${locale.formatBossId(log.boss)}',
-                    '${locale.formatBossId(_log.boss)}',
-                    textAlign: TextAlign.center,
-                    style: MgTheme.Text.title,
-                  ),
+                  _title,
                   Expanded(
                     child: Container(),
                   ),

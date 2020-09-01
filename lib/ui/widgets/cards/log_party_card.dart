@@ -5,12 +5,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../theme.dart' as MgTheme;
+import '../../../data/data.dart' as Mg;
+import '../../../models/models.dart' as Model;
 
 import '../../../repositories/repository_locale.dart';
-import '../../../data/data.dart' as Mg;
 
-import '../../../models/models.dart' as Model;
+import '../../theme.dart' as MgTheme;
 
 import 'character_card.dart';
 
@@ -20,14 +20,25 @@ class _ExpansionState {
   _ExpansionState(this.expanded);
 }
 
-class LogPartyCard extends StatefulWidget {
+class PartyCard extends StatefulWidget {
   final Model.LogParty _log;
   final _ExpansionState _expansionState = _ExpansionState(false);
+  final Widget _title;
 
-  LogPartyCard(this._log, {Key key}) : super(key: key);
+  PartyCard(this._log, this._title, {Key key}) : super(key: key);
+
+  PartyCard.log(this._log, String bossName, {Key key})
+      : _title = Text(bossName,
+            style: MgTheme.Text.title),
+        super(key: key);
+
+  PartyCard.ranking(this._log, int rank, {Key key})
+      : _title = Text('#$rank',
+            style: MgTheme.Text.title.copyWith(fontSize: 25)),
+        super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _LogPartyCardState();
+  State<StatefulWidget> createState() => _PartyCardState();
 
   get expanded {
     return _expansionState.expanded;
@@ -38,7 +49,7 @@ class LogPartyCard extends StatefulWidget {
   }
 }
 
-class _LogPartyCardState extends State<LogPartyCard> {
+class _PartyCardState extends State<PartyCard> {
   List<Widget> _buildCharacterCards(Model.LogParty log, Mg.Locale locale) {
     List<Widget> playerCards = [];
     for (int i = 0; i < log.characters.length; i++) {
@@ -134,12 +145,7 @@ class _LogPartyCardState extends State<LogPartyCard> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    // '${locale.formatZoneId(log.boss)}: ${locale.formatBossId(log.boss)}',
-                    '${locale.formatBossId(log.boss)}',
-                    textAlign: TextAlign.center,
-                    style: MgTheme.Text.title,
-                  ),
+                  widget._title,
                   Expanded(
                     child: Container(),
                   ),

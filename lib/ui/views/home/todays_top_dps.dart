@@ -3,13 +3,16 @@
 ///
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../mg_view_state.dart';
+import '../../../repositories/repository_locale.dart';
+
+import '../../../data/data.dart' as Mg;
+import '../../../models/models.dart' as Model;
+import '../../../mg_api/requests/requests.dart' as Requests;
 
 import '../../widgets/cards/log_character_card.dart';
-
-import '../../../mg_api/requests/requests.dart' as Requests;
-import '../../../models/models.dart' as Model;
+import '../mg_view_state.dart';
 
 class TodaysTopDps extends StatefulWidget {
   @override
@@ -27,7 +30,8 @@ class _State extends MgViewState<TodaysTopDps, Model.LogCharacter, Requests.Rank
   _State() : super(requestFactory: _RequestFactory());
 
   @override
-  Widget buildItem(Model.LogCharacter item) {
-    return LogCharacterCard(item);
+  Widget buildItem(Model.LogCharacter item, int index) {
+    Mg.Locale locale = RepositoryProvider.of<RepositoryLocale>(context).locale;
+    return CharacterCard.log(item, locale.formatBossId(item.boss),);
   }
 }

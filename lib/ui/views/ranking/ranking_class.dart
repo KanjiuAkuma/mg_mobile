@@ -27,8 +27,8 @@ class _State extends MgViewState<RankingClass, Model.LogCharacter, Requests.Rank
   _State(ClassSearchBar searchBar): super(header: searchBar, requestFactory: searchBar);
 
   @override
-  Widget buildItem(Model.LogCharacter item) {
-    return LogCharacterCard(item);
+  Widget buildItem(Model.LogCharacter item, int index) {
+    return CharacterCard.ranking(item, index + 1);
   }
 
 }
