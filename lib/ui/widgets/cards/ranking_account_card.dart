@@ -83,7 +83,7 @@ class _State extends State<RankingAccountCard> {
                       children: [
                         Text(
                           '${r.character.name}',
-                          style: MgTheme.Text.title.copyWith(color: r.character.color),
+                          style: MgTheme.Text.name.copyWith(color: r.character.color),
                         ),
                         SizedBox(
                           height: 5,
@@ -186,7 +186,7 @@ class _State extends State<RankingAccountCard> {
                       // char name
                       Text(
                         '${r.character.name}',
-                        style: MgTheme.Text.title.copyWith(color: r.character.color),
+                        style: MgTheme.Text.name.copyWith(color: r.character.color),
                         overflow: TextOverflow.ellipsis,
                       ),
                       Expanded(

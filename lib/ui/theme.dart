@@ -38,6 +38,7 @@ class Text {
   static final double _textSizeTitle = 20;
 
   static final TextStyle title = TextStyle(color: Foreground.accentTitle, fontSize: _textSizeTitle);
+  static final TextStyle name = TextStyle(color: Foreground.global, fontSize: _textSizeTitle);
   static final TextStyle normal = TextStyle(color: Foreground.global, fontSize: _textSizeNormal);
 
   static final TextStyle dps = TextStyle(color: _rgb(255, 151, 151), fontSize: _textSizeNormal);

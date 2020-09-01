@@ -71,7 +71,7 @@ class RankingCharacterCard extends StatelessWidget {
               // char name
               Text(
                 '${_ranking.character.name}',
-                style: MgTheme.Text.title.copyWith(color: _ranking.character.color),
+                style: MgTheme.Text.name.copyWith(color: _ranking.character.color),
               ),
               Expanded(
                 child: Container(),

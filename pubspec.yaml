@@ -4,7 +4,7 @@ description: Mobile app for mg
 # Remove this line if you wish to publish to pub.dev
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 0.1.0+0
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
