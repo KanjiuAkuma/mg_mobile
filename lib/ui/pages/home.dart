@@ -2,7 +2,7 @@
 /// Created by Kanjiu Akuma on 8/22/2020.
 ///
 
-import 'mg_page.dart';
+import '../base/mg_page.dart';
 import '../widgets/mg_tab.dart';
 
 import '../views/home/home.dart' as ViewsHome;

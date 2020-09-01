@@ -40,7 +40,7 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
 
   /// Hook to force or suppress refresh upon certain states
   bool shouldRebuild(RequestState<R> requestState) {
-    if (requestState is RequestLoadingState<R>) return !_isLoadingIndicatorShowing;
+    if (requestState is RequestLoadingState<R>) return !_isLoadingIndicatorShowing && requestState.previousComplete == null;
     return true;
   }
 
@@ -49,30 +49,35 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
 
   /// Default implementation for build error
   Widget buildError(R request, String err) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: GestureDetector(
-        onTap: () => BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Something went wrong, Tap to retry:',
-              style: MgTheme.Text.normal,
+    return GestureDetector(
+      onTap: () => BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request)),
+      child: Column(
+        children: [
+          if (_header != null) _header,
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Something went wrong, Tap to retry:',
+                  style: MgTheme.Text.normal,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    err,
+                    style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
+                    softWrap: true,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text(
-                err,
-                style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
-                softWrap: true,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -136,8 +141,13 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
             return shouldRebuild(current);
           },
           builder: (context, state) {
-
             if (state is RequestLoadedState<R>) {
+              if (state.request.shouldRefresh()) {
+                R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region);
+                if (request != null) {
+                  BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
+                }
+              }
               _isLoadingIndicatorShowing = false;
               return buildLoaded(state.response.data);
             } else if (state is RequestNoneState<R>) {

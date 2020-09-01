@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../../../mg_api/requests/requests.dart' as Requests;
 import '../../../models/models.dart' as Model;
 
-import '../mg_view_state.dart';
+import '../../base/mg_view_state.dart';
 import '../../widgets/search_bars/clears_search_bar.dart';
 import '../../widgets/cards/ranking_account_card.dart';
 import '../../widgets/cards/ranking_character_card.dart';

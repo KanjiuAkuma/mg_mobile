@@ -14,7 +14,7 @@ import '../../../mg_api/requests/requests.dart' as Requests;
 
 import '../../theme.dart' as MgTheme;
 
-import '../../views/mg_view_state.dart';
+import '../../base/mg_view_state.dart';
 import 'fields/dropdown/dropdown.dart' as Dropdown;
 import 'fields/text_input/text_input.dart' as TextInput;
 

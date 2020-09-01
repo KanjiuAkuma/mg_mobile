@@ -16,7 +16,7 @@ import '../../../mg_api/requests/requests.dart' as Requests;
 
 import '../../../repositories/repository_locale.dart';
 
-import '../../views/mg_view_state.dart';
+import '../../base/mg_view_state.dart';
 
 class ClearsSearchBar extends StatefulWidget implements RequestFactory<Requests.RankingClears> {
   final _SearchBarData data = _SearchBarData();

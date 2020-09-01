@@ -12,7 +12,7 @@ import '../../../models/models.dart' as Model;
 import '../../../mg_api/requests/requests.dart' as Requests;
 
 import '../../widgets/cards/log_character_card.dart';
-import '../mg_view_state.dart';
+import '../../base/mg_view_state.dart';
 
 class TodaysTopDps extends StatefulWidget {
   @override

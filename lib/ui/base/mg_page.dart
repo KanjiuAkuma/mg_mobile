@@ -8,7 +8,6 @@ import '../theme.dart' as MgTheme;
 
 import '../widgets/mg_tab.dart';
 
-
 /// Yes yes, its unnecessary but i hate warnings! >.<
 class _Index {
   int value = 0;
@@ -35,8 +34,8 @@ class _MgPageState extends State<MgPage> with SingleTickerProviderStateMixin {
       vsync: this,
       initialIndex: widget.index.value,
     )..addListener(() {
-      widget.index.value = _tabController.index;
-    });
+        widget.index.value = _tabController.index;
+      });
   }
 
   @override

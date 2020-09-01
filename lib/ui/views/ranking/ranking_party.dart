@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../../../mg_api/requests/requests.dart' as Requests;
 import '../../../models/models.dart' as Model;
 
-import '../mg_view_state.dart';
+import '../../base/mg_view_state.dart';
 import '../../widgets/cards/log_party_card.dart';
 import '../../widgets/search_bars/party_search_bar.dart';
 

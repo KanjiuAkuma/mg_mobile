@@ -20,7 +20,7 @@ import '../../theme.dart' as MgTheme;
 import 'fields/dropdown/dropdown.dart' as Dropdown;
 import 'fields/checkbox/checkbox.dart' as Checkbox;
 
-import '../../views/mg_view_state.dart';
+import '../../base/mg_view_state.dart';
 
 class PartySearchBar extends StatefulWidget implements RequestFactory<Requests.RankingParty> {
   final _SearchBarData data = _SearchBarData();

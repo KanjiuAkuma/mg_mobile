@@ -23,6 +23,7 @@ class MgBadResponseCode extends MgClientException {
 }
 
 class MgMaxRetriesExceeded extends MgClientException {
-  MgMaxRetriesExceeded(int retries, dynamic error, http.Response response) : super('Max retries ($retries) exceeded: ${error.toString()}', response);
-
+  final dynamic error;
+  MgMaxRetriesExceeded(int retries, this.error, http.Response response)
+      : super('Max retries ($retries) exceeded', response);
 }

@@ -11,7 +11,7 @@ import '../../../models/models.dart' as Model;
 
 import '../../../mg_api/requests/requests.dart' as Requests;
 
-import '../mg_view_state.dart';
+import '../../base/mg_view_state.dart';
 import '../../widgets/cards/log_party_card.dart';
 
 class RecentUploads extends StatefulWidget {
