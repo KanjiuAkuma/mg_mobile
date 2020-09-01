@@ -23,7 +23,7 @@ class Ranking extends MgPage {
           MgTab(
             name: 'Party',
             // icon: Icon(Icons.format_list_numbered),
-            widget: ViewsRanking.RankingParty(),
+            widget: ViewsRanking.RankingParty(null),
           )
         ]);
 }

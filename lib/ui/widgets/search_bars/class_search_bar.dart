@@ -20,6 +20,7 @@ class ClassSearchBar extends StatefulWidget implements RequestFactory<Requests.R
   final _SearchBarData data = _SearchBarData();
 
   ClassSearchBar(Requests.RankingClass request) {
+    // maybe push data
     if (request != null) {
       data.clazz = request.clazz;
       data.server = request.server;
@@ -107,7 +108,7 @@ class _State extends State<ClassSearchBar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              // class, server
+              // class, server, span
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 DropdownButton<String>(
@@ -185,7 +186,7 @@ class _State extends State<ClassSearchBar> {
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 15,
             ),
             Row(
               // zone, boss
@@ -261,7 +262,7 @@ class _State extends State<ClassSearchBar> {
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 15,
             ),
             // healer type
             Row(
@@ -318,7 +319,7 @@ class _State extends State<ClassSearchBar> {
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 15,
             ),
             // tank type
             Row(

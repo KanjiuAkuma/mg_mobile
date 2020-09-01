@@ -36,12 +36,12 @@ class Locale {
   }
 
   String formatBossId(Model.Boss boss) {
-    assert(monsters.containsKey(boss.zoneId) && boss.version == monsters[boss.zoneId]['version'], 'Boss version mismatch');
+    assert(monsters.containsKey(boss.zoneId) && boss.version == monsters[boss.zoneId]['version'], 'Boss version mismatch or boss not found');
     return monsters[boss.zoneId]['monsters'][boss.bossId];
   }
 
   String formatZoneId(Model.Boss boss) {
-    assert(boss.version == monsters['${boss.zoneId}']['version'], 'Boss version mismatch');
+    assert(boss.version == monsters['${boss.zoneId}']['version'], 'Boss version mismatch or boss not found');
     return monsters['${boss.zoneId}']['name'];
   }
 
