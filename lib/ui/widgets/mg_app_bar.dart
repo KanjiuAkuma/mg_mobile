@@ -5,13 +5,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../theme.dart' as MgTheme;
+import '../../data/data.dart' as Mg;
 
 import '../../bloc/region/region_bloc.dart';
 import '../../bloc/region/region_state.dart';
 import '../../bloc/region/region_event.dart';
 
-import '../../data/regions.dart';
+import '../theme.dart' as MgTheme;
 
 class MgAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -26,11 +26,11 @@ class MgAppBar extends StatelessWidget implements PreferredSizeWidget {
     return BlocBuilder<RegionBloc, RegionState>(
       builder: (context, state) => AppBar(
         backgroundColor: MgTheme.Background.appBar,
-        title: Text('mg/${regions[state.region]['name']}'),
+        title: Text('mg/${Mg.regions[state.region]['name']}'),
         actions: [
           DropdownButton<String>(
             value: state.region,
-            items: regions.keys
+            items: Mg.regions.keys
                 .map<DropdownMenuItem<String>>((e) => DropdownMenuItem(
                       value: e,
                       child: Text(e),
