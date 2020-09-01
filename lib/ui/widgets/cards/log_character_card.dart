@@ -96,7 +96,7 @@ class CharacterCard extends StatelessWidget {
                     children: [
                       Text(
                         '${_log.character.name}',
-                        style: MgTheme.Text.name.copyWith(color: _log.character.color),
+                        style: MgTheme.Text.title.copyWith(color: _log.character.color),
                       ),
                       SizedBox(
                         height: 10,
@@ -113,7 +113,7 @@ class CharacterCard extends StatelessWidget {
                             width: 10,
                           ),
                           Text(
-                            '(${_log.character.server})',
+                            '${_log.character.server}',
                             style: MgTheme.Text.normal,
                           ),
                         ],
