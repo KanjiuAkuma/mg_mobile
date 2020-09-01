@@ -11,7 +11,7 @@ class Ranking extends MgPage {
   Ranking()
       : super(tabs: [
           MgTab(
-            name: 'Boss',
+            name: 'Clears',
             // icon: Icon(Icons.list),
             widget: ViewsRanking.RankingClears(null),
           ),
