@@ -89,7 +89,7 @@ class CharacterCard extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        '${_character.server}',
+                        '(${_character.server})',
                         style: MgTheme.Text.normal,
                       ),
                     ],
