@@ -5,7 +5,7 @@
 import 'checkbox_base.dart';
 
 class SortByDps extends CheckboxBase {
-  SortByDps(bool value, callback, bool textFirst)
+  SortByDps(bool value, callback, [bool textFirst = true])
       : super(
     'Sort by dps',
     value,

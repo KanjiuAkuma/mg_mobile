@@ -41,7 +41,10 @@ class DropdownBase<V> extends StatelessWidget {
       items: _items.map((i) {
         return DropdownMenuItem<V>(
           value: i.value,
-          child: Text(i.text),
+          child: Text(
+            i.text,
+            overflow: TextOverflow.ellipsis,
+          ),
         );
       }).toList(),
     );

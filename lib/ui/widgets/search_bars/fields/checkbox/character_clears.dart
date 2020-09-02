@@ -5,7 +5,7 @@
 import 'checkbox_base.dart';
 
 class CharacterClears extends CheckboxBase {
-  CharacterClears(bool value, callback, bool textFirst)
+  CharacterClears(bool value, callback, [bool textFirst = true])
       : super(
           'Show clears per character',
           value,

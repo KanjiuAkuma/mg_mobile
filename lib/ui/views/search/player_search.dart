@@ -11,21 +11,23 @@ import '../../../models/models.dart' as Model;
 
 import '../../../mg_api/requests/requests.dart' as Requests;
 
+import '../../base/mg_view_state.dart';
+import '../../base/search_bar.dart';
+
 import '../../widgets/search_bars/character_search_bar.dart';
 import '../../widgets/cards/log_party_card.dart';
-import '../../base/mg_view_state.dart';
 
-class PlayerSearch extends StatefulWidget {
+class CharacterSearch extends StatefulWidget {
   final CharacterSearchBar _searchBar;
 
-  PlayerSearch(Requests.Search request) : _searchBar = CharacterSearchBar(request);
+  CharacterSearch(Requests.Search request) : _searchBar = CharacterSearchBar(request);
 
   @override
   State<StatefulWidget> createState() => _State(_searchBar);
 }
 
-class _State extends MgViewState<PlayerSearch, Model.LogParty, Requests.Search> {
-  _State(CharacterSearchBar searchBar) : super(header: searchBar, requestFactory: searchBar);
+class _State extends MgViewState<CharacterSearch, Model.LogParty, Requests.Search> {
+  _State(CharacterSearchBar searchBar) : super(header: SearchBarWrapper(searchBar), requestFactory: searchBar);
 
   @override
   Widget buildItem(Model.LogParty item, int index) {

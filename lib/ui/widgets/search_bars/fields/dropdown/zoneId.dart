@@ -13,7 +13,7 @@ class ZoneId extends DropdownBase<String> {
   }) : super(
           value,
           callback,
-          items.entries.map((e) => DropdownItem(e.key, e.value)).toList(),
+          items.entries.map<DropdownItem<String>>((e) => DropdownItem<String>(e.key, e.value)).toList(),
           defaultItem: any ? DropdownItem(null, 'All Bosses') : null,
         );
 }

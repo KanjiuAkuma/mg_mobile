@@ -61,16 +61,19 @@ class Boss extends StatelessWidget {
             width: 15,
           ),
         if (_version != null && locale.monsters[_zoneId]['monsters'].keys.length != 1)
-          BossId(
-            _bossId,
-            (v) {
-              _callback(Model.Boss(
-                _version,
-                _zoneId,
-                v,
-              ));
-            },
-            locale.monsters[_zoneId]['monsters'],
+          Expanded(
+            child: BossId(
+              _bossId,
+              (v) {
+                _callback(Model.Boss(
+                  _version,
+                  _zoneId,
+                  v,
+                ));
+              },
+              locale.monsters[_zoneId]['monsters'],
+              true,
+            ),
           ),
         if (_version != null && locale.monsters[_zoneId]['monsters'].keys.length == 1)
           Expanded(

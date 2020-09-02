@@ -20,9 +20,9 @@ import '../../theme.dart' as MgTheme;
 import 'fields/dropdown/dropdown.dart' as Dropdown;
 import 'fields/checkbox/checkbox.dart' as Checkbox;
 
-import '../../base/mg_view_state.dart';
+import '../../base/search_bar.dart';
 
-class PartySearchBar extends StatefulWidget implements RequestFactory<Requests.RankingParty> {
+class PartySearchBar extends SearchBar<Requests.RankingParty> {
   final _SearchBarData data = _SearchBarData();
 
   PartySearchBar(Requests.RankingParty request) {
@@ -55,6 +55,11 @@ class PartySearchBar extends StatefulWidget implements RequestFactory<Requests.R
       data.multiTank,
       data.span,
     );
+  }
+
+  @override
+  get height {
+    return 222;
   }
 }
 

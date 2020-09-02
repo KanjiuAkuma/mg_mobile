@@ -10,9 +10,9 @@ import '../views/search/search.dart' as ViewsSearch;
 
 class Search extends StatelessWidget {
 
-  final ViewsSearch.PlayerSearch _view;
+  final ViewsSearch.CharacterSearch _view;
 
-  Search([Requests.Search request]): _view = ViewsSearch.PlayerSearch(request);
+  Search([Requests.Search request]): _view = ViewsSearch.CharacterSearch(request);
 
   @override
   Widget build(BuildContext context) {

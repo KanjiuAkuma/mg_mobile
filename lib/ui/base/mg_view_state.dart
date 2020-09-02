@@ -24,14 +24,13 @@ abstract class RequestFactory<R extends MgRequest> {
 
 abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> extends State<W> {
   MgViewState({
-    Widget header,
+    SliverPersistentHeaderDelegate header,
     @required RequestFactory<R> requestFactory,
   })  : _header = header,
         _requestFactory = requestFactory;
 
-  final Widget _header;
+  final SliverPersistentHeaderDelegate _header;
   final RequestFactory<R> _requestFactory;
-  ScrollController _scrollController = ScrollController();
   bool _isLoadingIndicatorShowing = false;
 
   Future<void> _shouldDisposeLoadingIndicator() async {
@@ -42,7 +41,8 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
 
   /// Hook to force or suppress refresh upon certain states
   bool shouldRebuild(RequestState<R> requestState) {
-    if (requestState is RequestLoadingState<R>) return !_isLoadingIndicatorShowing && requestState.previousComplete == null;
+    if (requestState is RequestLoadingState<R>)
+      return !_isLoadingIndicatorShowing && requestState.previousComplete == null;
     return true;
   }
 
@@ -51,73 +51,59 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
 
   /// Default implementation for build error
   Widget buildError(R request, String err) {
-    return GestureDetector(
-      onTap: () => BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request)),
-      child: Column(
-        children: [
-          if (_header != null) _header,
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Something went wrong, Tap to retry:',
-                    style: MgTheme.Text.normal,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text(
-                      err,
-                      style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: GestureDetector(
+        onTap: () => BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request)),
+        child: Container(
+          width: double.infinity,
+          color: MgTheme.Background.global,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Something went wrong, Tap to retry:',
+                style: MgTheme.Text.normal,
+                textAlign: TextAlign.center,
               ),
-            ),
+              SizedBox(
+                height: 15,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  err,
+                  style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
   /// Default implementation for build loading
   Widget buildLoading() {
-    return Column(
-      children: [
-        if (_header != null) _header,
-        Expanded(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      ],
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
   /// Default implementation for build loaded
   Widget buildLoaded(List<T> logs) {
-    return ListView.builder(
-      shrinkWrap: true,
-      controller: _scrollController,
-      itemCount: logs.length + (_header != null ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (_header != null) {
-          if (index == 0) {
-            return _header;
-          }
-          index--;
-        }
-
-        return buildItem(logs[index], index);
-      },
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return buildItem(logs[index], index);
+        },
+        childCount: logs.length,
+      ),
     );
   }
 
@@ -147,6 +133,14 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
             return shouldRebuild(current);
           },
           builder: (context, state) {
+            List<Widget> slivers = [
+              if (_header != null)
+                SliverPersistentHeader(
+                  floating: true,
+                  delegate: _header,
+                ),
+            ];
+
             if (state is RequestLoadedState<R>) {
               if (state.request.shouldRefresh()) {
                 R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region);
@@ -154,26 +148,32 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
                   BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
                 }
               }
+
               _isLoadingIndicatorShowing = false;
-              return buildLoaded(state.response.data);
+              slivers.add(buildLoaded(state.response.data));
             } else if (state is RequestNoneState<R>) {
               // nothing fetched yet => fetch new
               R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region);
               if (request != null) {
                 BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
-                return buildLoading();
+                slivers.add(buildLoading());
               }
-              return buildLoaded([]);
+              slivers.add(buildLoaded([]));
             } else if (state is RequestLoadingState<R>) {
-              return buildLoading();
+              slivers.add(buildLoading());
             } else {
+              _isLoadingIndicatorShowing = false;
               if (state is RequestErrorState<R>) {
-                return buildError(state.request, state.error);
+                slivers.add(buildError(state.request, state.error));
+              } else {
+                assert(false, 'Unknown state $state!');
+                slivers.add(buildError(state.request, 'Unknown state $state!'));
               }
-
-              assert(false, 'Unknown state $state!');
-              return buildError(state.request, 'Unknown state $state!');
             }
+
+            return CustomScrollView(
+              slivers: slivers,
+            );
           },
         ),
       ),

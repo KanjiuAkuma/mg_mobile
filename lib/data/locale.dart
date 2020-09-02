@@ -44,13 +44,13 @@ class Locale {
   }
 
   String formatBossId(Model.Boss boss) {
-    assert(monsters.containsKey(boss.zoneId) && boss.version == monsters[boss.zoneId]['version'], 'Boss version mismatch or boss not found');
-    return monsters[boss.zoneId]['monsters'][boss.bossId];
-  }
+    if (!monsters.containsKey(boss.zoneId)) {
+      print('Warning: boss not found: $boss');
+      return '${boss.bossId}';
+    }
 
-  String formatZoneId(Model.Boss boss) {
-    assert(boss.version == monsters['${boss.zoneId}']['version'], 'Boss version mismatch or boss not found');
-    return monsters['${boss.zoneId}']['name'];
+    assert(boss.version == monsters[boss.zoneId]['version'], 'Boss version mismatch');
+    return monsters[boss.zoneId]['monsters'][boss.bossId];
   }
 
   String formatDps(int dps) {
@@ -79,6 +79,13 @@ class Locale {
 
   static Future<Locale> fromName(String localeName) async {
     Map<String, dynamic> monsters = json.decode(await rootBundle.loadString('assets/data/monsters.json'));
+    monsters = monsters.map((k, v) {
+      v['monsters'] = v['monsters'].cast<String, String>();
+      return MapEntry(
+        k,
+        v,
+      );
+    });
     return Locale(DateFormat('MMM dd. yyyy'), DateFormat('HH:mm'), monsters);
   }
 

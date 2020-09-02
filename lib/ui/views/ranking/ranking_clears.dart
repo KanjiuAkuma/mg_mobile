@@ -8,6 +8,8 @@ import '../../../mg_api/requests/requests.dart' as Requests;
 import '../../../models/models.dart' as Model;
 
 import '../../base/mg_view_state.dart';
+import '../../base/search_bar.dart';
+
 import '../../widgets/search_bars/clears_search_bar.dart';
 import '../../widgets/cards/ranking_account_card.dart';
 import '../../widgets/cards/ranking_character_card.dart';
@@ -26,7 +28,7 @@ class RankingClears extends StatefulWidget {
 
 class _State extends MgViewState<RankingClears, dynamic, Requests.RankingClears> {
 
-  _State(ClearsSearchBar searchBar): super(header: searchBar, requestFactory: searchBar);
+  _State(ClearsSearchBar searchBar): super(header: SearchBarWrapper(searchBar), requestFactory: searchBar);
 
   @override
   Widget buildItem(dynamic item, _) {

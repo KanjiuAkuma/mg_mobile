@@ -18,9 +18,9 @@ import '../../theme.dart' as MgTheme;
 import 'fields/dropdown/dropdown.dart' as Dropdown;
 import 'fields/checkbox/checkbox.dart' as Checkbox;
 
-import '../../base/mg_view_state.dart';
+import '../../base/search_bar.dart';
 
-class ClassSearchBar extends StatefulWidget implements RequestFactory<Requests.RankingClass> {
+class ClassSearchBar extends SearchBar<Requests.RankingClass> {
   final _SearchBarData data = _SearchBarData();
 
   ClassSearchBar(Requests.RankingClass request) {
@@ -61,6 +61,11 @@ class ClassSearchBar extends StatefulWidget implements RequestFactory<Requests.R
       data.typeTank,
       data.typeHeal,
     );
+  }
+
+  @override
+  get height {
+    return 267;
   }
 }
 

@@ -5,6 +5,11 @@
 import 'dropdown_base.dart';
 
 class BossId extends DropdownBase<String> {
-  BossId(String value, callback, Map<String, String> items)
-      : super(value, callback, items.entries.map((e) => DropdownItem(e.key, e.value)));
+  BossId(String value, callback, Map<String, String> items, [expanded = false])
+      : super(
+          value,
+          callback,
+          items.entries.map((e) => DropdownItem(e.key, e.value)).toList(),
+          expanded: expanded,
+        );
 }

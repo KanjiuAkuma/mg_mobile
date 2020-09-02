@@ -8,6 +8,8 @@ import '../../../mg_api/requests/requests.dart' as Requests;
 import '../../../models/models.dart' as Model;
 
 import '../../base/mg_view_state.dart';
+import '../../base/search_bar.dart';
+
 import '../../widgets/cards/log_character_card.dart';
 import '../../widgets/search_bars/class_search_bar.dart';
 
@@ -24,7 +26,7 @@ class RankingClass extends StatefulWidget {
 
 class _State extends MgViewState<RankingClass, Model.LogCharacter, Requests.RankingClass> {
 
-  _State(ClassSearchBar searchBar): super(header: searchBar, requestFactory: searchBar);
+  _State(ClassSearchBar searchBar): super(header: SearchBarWrapper(searchBar), requestFactory: searchBar);
 
   @override
   Widget buildItem(Model.LogCharacter item, int index) {

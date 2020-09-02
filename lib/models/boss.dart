@@ -16,4 +16,9 @@ class Boss {
       '${json['bossId']}',
     );
   }
+
+  @override
+  String toString() {
+    return 'Boss id=$bossId, zone=$zoneId, version=$version';
+  }
 }

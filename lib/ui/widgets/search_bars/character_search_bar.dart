@@ -14,11 +14,13 @@ import '../../../mg_api/requests/requests.dart' as Requests;
 
 import '../../theme.dart' as MgTheme;
 
-import '../../base/mg_view_state.dart';
 import 'fields/dropdown/dropdown.dart' as Dropdown;
+import 'fields/checkbox/checkbox.dart' as Checkbox;
 import 'fields/text_input/text_input.dart' as TextInput;
 
-class CharacterSearchBar extends StatefulWidget implements RequestFactory<Requests.Search> {
+import '../../base/search_bar.dart';
+
+class CharacterSearchBar extends SearchBar<Requests.Search> {
   final _SearchBarData data = _SearchBarData();
 
   CharacterSearchBar(Requests.Search request) {
@@ -26,10 +28,9 @@ class CharacterSearchBar extends StatefulWidget implements RequestFactory<Reques
       data.characterName = request.characterName;
       data.server = request.server;
       data.boss = request.boss;
-      data.searchGuild = request.searchForGuild;
-      data.sortDps = request.sortByDps;
-    }
-    else {
+      data.searchForGuild = request.searchForGuild;
+      data.sortByDps = request.sortByDps;
+    } else {
       data.characterName = '';
     }
   }
@@ -46,14 +47,19 @@ class CharacterSearchBar extends StatefulWidget implements RequestFactory<Reques
       data.characterName,
       data.boss,
       server: data.server,
-      searchForGuild: data.searchGuild,
-      sortByDps: data.sortDps,
+      searchForGuild: data.searchForGuild,
+      sortByDps: data.sortByDps,
     );
+  }
+
+  @override
+  get height {
+    return 242;
   }
 }
 
 class _SearchBarData {
-  bool searchGuild = false, sortDps = false;
+  bool searchForGuild = false, sortByDps = false;
   Model.Boss boss;
   String server;
   String characterName = '';
@@ -116,6 +122,7 @@ class _State extends State<CharacterSearchBar> {
             SizedBox(
               height: 10,
             ),
+            // Boss
             Dropdown.Boss(
               data.boss,
               (boss) {
@@ -126,6 +133,30 @@ class _State extends State<CharacterSearchBar> {
               },
               any: true,
             ),
+            SizedBox(
+              height: 10,
+            ),
+            // search type and sort
+            Checkbox.SearchForGuild(
+              data.searchForGuild,
+              (searchForGuild) {
+                setState(() {
+                  data.searchForGuild = searchForGuild;
+                });
+                _maybeSubmit();
+              },
+              false,
+            ),
+            Checkbox.SortByDps(
+              data.sortByDps,
+              (sortByDps) {
+                setState(() {
+                  data.sortByDps = sortByDps;
+                });
+                _maybeSubmit();
+              },
+              false,
+            )
           ],
         ),
       ),
