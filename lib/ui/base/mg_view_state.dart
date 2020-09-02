@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 ///
 /// Created by Kanjiu Akuma on 8/31/2020.
 ///
@@ -55,26 +57,30 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
         children: [
           if (_header != null) _header,
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Something went wrong, Tap to retry:',
-                  style: MgTheme.Text.normal,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    err,
-                    style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
-                    softWrap: true,
+            child: Container(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Something went wrong, Tap to retry:',
+                    style: MgTheme.Text.normal,
+                    textAlign: TextAlign.center,
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      err,
+                      style: MgTheme.Text.normal.copyWith(color: Colors.red[800]),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
