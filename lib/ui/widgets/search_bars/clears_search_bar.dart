@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/region/region_bloc.dart';
+import '../../../bloc/region/region_state.dart';
 import '../../../bloc/request/request_bloc.dart';
 import '../../../bloc/request/request_event.dart';
 
@@ -32,20 +33,20 @@ class ClearsSearchBar extends SearchBar<Requests.RankingClears> {
   }
 
   @override
-  Requests.RankingClears createRequest(String region) {
+  Requests.RankingClears createRequest(String region, [bool changed = false]) {
     if (data.boss == null) return null;
 
     if (data.accountClears) {
       return Requests.RankingClearsAccount.fromBoss(
         region,
         data.boss,
-        data.server,
+        changed ? null : data.server,
       );
     } else {
       return Requests.RankingClearsCharacters.fromBoss(
         region,
         data.boss,
-        data.server,
+        changed ? null : data.server,
       );
     }
   }
@@ -75,18 +76,14 @@ class _State extends State<ClearsSearchBar> {
       if (data.accountClears) {
         BlocProvider.of<RequestBloc<Requests.RankingClears>>(context)
             .add(RequestEvent<Requests.RankingClears>(Requests.RankingClearsAccount.fromBoss(
-          BlocProvider
-              .of<RegionBloc>(context)
-              .region,
+          BlocProvider.of<RegionBloc>(context).region,
           data.boss,
           data.server,
         )));
       } else {
         BlocProvider.of<RequestBloc<Requests.RankingClears>>(context)
             .add(RequestEvent<Requests.RankingClears>(Requests.RankingClearsCharacters.fromBoss(
-          BlocProvider
-              .of<RegionBloc>(context)
-              .region,
+          BlocProvider.of<RegionBloc>(context).region,
           data.boss,
           data.server,
         )));
@@ -96,37 +93,43 @@ class _State extends State<ClearsSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: MgTheme.Background.tabBar,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Dropdown.Boss(
-              data.boss,
+    return BlocConsumer<RegionBloc, RegionState>(
+      listener: (context, state) {
+        // reset data
+        data.server = null;
+      },
+      builder: (context, state) => Container(
+        color: MgTheme.Background.tabBar,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Dropdown.Boss(
+                data.boss,
                 (boss) {
-                setState(() {
-                  data.boss = boss;
-                });
-                _maybeSubmit();
+                  setState(() {
+                    data.boss = boss;
+                  });
+                  _maybeSubmit();
                 },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Checkbox.CharacterClears(
-              !data.accountClears,
-                  (accountClears) {
-                setState(() {
-                  data.accountClears = !accountClears;
-                });
-                _maybeSubmit();
-              },
-              false,
-            ),
-          ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Checkbox.CharacterClears(
+                !data.accountClears,
+                (accountClears) {
+                  setState(() {
+                    data.accountClears = !accountClears;
+                  });
+                  _maybeSubmit();
+                },
+                false,
+              ),
+            ],
+          ),
         ),
       ),
     );

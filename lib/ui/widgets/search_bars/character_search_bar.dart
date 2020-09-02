@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/region/region_bloc.dart';
+import '../../../bloc/region/region_state.dart';
 import '../../../bloc/request/request_bloc.dart';
 import '../../../bloc/request/request_event.dart';
 
@@ -32,6 +33,8 @@ class CharacterSearchBar extends SearchBar<Requests.Search> {
       data.sortByDps = request.sortByDps;
     } else {
       data.characterName = '';
+      data.searchForGuild = false;
+      data.sortByDps = false;
     }
   }
 
@@ -39,14 +42,14 @@ class CharacterSearchBar extends SearchBar<Requests.Search> {
   State<StatefulWidget> createState() => _State();
 
   @override
-  Requests.Search createRequest(String region) {
-    if (data.characterName.isEmpty) return null;
+  Requests.Search createRequest(String region, [bool changed = false]) {
+    if (changed || data.characterName.isEmpty) return null;
 
     return Requests.Search.fromBoss(
       region,
       data.characterName,
       data.boss,
-      server: data.server,
+      server: changed ? null : data.server,
       searchForGuild: data.searchForGuild,
       sortByDps: data.sortByDps,
     );
@@ -59,10 +62,10 @@ class CharacterSearchBar extends SearchBar<Requests.Search> {
 }
 
 class _SearchBarData {
-  bool searchForGuild = false, sortByDps = false;
-  Model.Boss boss;
+  String characterName;
   String server;
-  String characterName = '';
+  Model.Boss boss;
+  bool searchForGuild, sortByDps;
 }
 
 class _State extends State<CharacterSearchBar> {
@@ -82,84 +85,93 @@ class _State extends State<CharacterSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: MgTheme.Background.tabBar,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // User name input
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+    return BlocConsumer<RegionBloc, RegionState>(
+      listener: (context, state) {
+        // reset data
+        data.characterName = '';
+        data.server = null;
+      },
+      builder: (context, state) {
+        return Container(
+          color: MgTheme.Background.tabBar,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: TextInput.CharacterName(
-                    data.characterName,
-                    _characterNameNode,
-                    (characterName) {
-                      data.characterName = characterName;
-                    },
-                    _maybeSubmit,
-                  ),
+                // User name input
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: TextInput.CharacterName(
+                        data.characterName,
+                        _characterNameNode,
+                        (characterName) {
+                          data.characterName = characterName;
+                        },
+                        _maybeSubmit,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Dropdown.Server(
+                      data.server,
+                      (server) {
+                        setState(() {
+                          data.server = server;
+                        });
+                        _maybeSubmit();
+                      },
+                      BlocProvider.of<RegionBloc>(context).region,
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  width: 15,
+                  height: 10,
                 ),
-                Dropdown.Server(
-                  data.server,
-                  (server) {
+                // Boss
+                Dropdown.Boss(
+                  data.boss,
+                  (boss) {
                     setState(() {
-                      data.server = server;
+                      data.boss = boss;
                     });
                     _maybeSubmit();
                   },
-                  BlocProvider.of<RegionBloc>(context).region,
+                  any: true,
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                // search type and sort
+                Checkbox.SearchForGuild(
+                  data.searchForGuild,
+                  (searchForGuild) {
+                    setState(() {
+                      data.searchForGuild = searchForGuild;
+                    });
+                    _maybeSubmit();
+                  },
+                  false,
+                ),
+                Checkbox.SortByDps(
+                  data.sortByDps,
+                  (sortByDps) {
+                    setState(() {
+                      data.sortByDps = sortByDps;
+                    });
+                    _maybeSubmit();
+                  },
+                  false,
+                )
               ],
             ),
-            SizedBox(
-              height: 10,
-            ),
-            // Boss
-            Dropdown.Boss(
-              data.boss,
-              (boss) {
-                setState(() {
-                  data.boss = boss;
-                });
-                _maybeSubmit();
-              },
-              any: true,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            // search type and sort
-            Checkbox.SearchForGuild(
-              data.searchForGuild,
-              (searchForGuild) {
-                setState(() {
-                  data.searchForGuild = searchForGuild;
-                });
-                _maybeSubmit();
-              },
-              false,
-            ),
-            Checkbox.SortByDps(
-              data.sortByDps,
-              (sortByDps) {
-                setState(() {
-                  data.sortByDps = sortByDps;
-                });
-                _maybeSubmit();
-              },
-              false,
-            )
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -21,7 +21,7 @@ class TodaysTopDps extends StatefulWidget {
 
 class _RequestFactory extends RequestFactory<Requests.Ranking24Hour> {
   @override
-  Requests.Ranking24Hour createRequest(String region) {
+  Requests.Ranking24Hour createRequest(String region, [bool changed = false]) {
     return Requests.Ranking24Hour(region);
   }
 }

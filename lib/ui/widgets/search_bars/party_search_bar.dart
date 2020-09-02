@@ -44,13 +44,13 @@ class PartySearchBar extends SearchBar<Requests.RankingParty> {
   State<StatefulWidget> createState() => _State();
 
   @override
-  Requests.RankingParty createRequest(String region) {
+  Requests.RankingParty createRequest(String region, [bool changed = false]) {
     if (data.boss == null) return null;
 
     return Requests.RankingParty.fromBoss(
       region,
       data.boss,
-      data.server,
+      changed ? null : data.server,
       data.multiHeal,
       data.multiTank,
       data.span,
@@ -90,84 +90,89 @@ class _State extends State<PartySearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: MgTheme.Background.tabBar,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // zone, boss
-            Dropdown.Boss(
-              data.boss,
-              (boss) {
-                setState(() {
-                  data.boss = boss;
-                });
-                _maybeSubmit();
-              },
-              any: false,
-            ),
-            SizedBox(
-              width: 15,
-            ),
-            // server, span
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocConsumer(
+      listener: (context, state) {
+        // reset data
+        data.server = null;
+      },
+      builder: (context, state) {
+        return Container(
+          color: MgTheme.Background.tabBar,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Dropdown.Server(
-                  data.server,
-                  (server) {
+                // zone, boss
+                Dropdown.Boss(
+                  data.boss,
+                  (boss) {
                     setState(() {
-                      data.server = server;
+                      data.boss = boss;
                     });
                     _maybeSubmit();
                   },
-                  BlocProvider.of<RegionBloc>(context).region,
+                  any: false,
                 ),
-                Dropdown.Span(
-                  data.span,
-                        (span) {
+                SizedBox(
+                  width: 15,
+                ),
+                // server, span
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Dropdown.Server(
+                      data.server,
+                      (server) {
+                        setState(() {
+                          data.server = server;
+                        });
+                        _maybeSubmit();
+                      },
+                      BlocProvider.of<RegionBloc>(context).region,
+                    ),
+                    Dropdown.Span(data.span, (span) {
                       setState(() {
                         data.span = span;
                       });
                       _maybeSubmit();
-                    }
+                    }),
+                  ],
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                // multi heal
+                Checkbox.MultiHeal(
+                  data.multiHeal,
+                  (multiHeal) {
+                    setState(() {
+                      data.multiHeal = multiHeal;
+                    });
+                    _maybeSubmit();
+                  },
+                  false,
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                // multi tank
+                Checkbox.MultiTank(
+                  data.multiTank,
+                  (multiTank) {
+                    setState(() {
+                      data.multiTank = multiTank;
+                    });
+                    _maybeSubmit();
+                  },
+                  false,
                 ),
               ],
             ),
-            SizedBox(
-              width: 15,
-            ),
-            // multi heal
-            Checkbox.MultiHeal(
-              data.multiHeal,
-                  (multiHeal) {
-                setState(() {
-                  data.multiHeal = multiHeal;
-                });
-                _maybeSubmit();
-              },
-              false,
-            ),
-            SizedBox(
-              width: 15,
-            ),
-            // multi tank
-            Checkbox.MultiTank(
-              data.multiTank,
-                  (multiTank) {
-                setState(() {
-                  data.multiTank = multiTank;
-                });
-                _maybeSubmit();
-              },
-              false,
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -46,7 +46,7 @@ class SearchBarWrapper<T extends MgRequest> extends SliverPersistentHeaderDelega
   }
 
   @override
-  T createRequest(String region) {
-    return _searchBar.createRequest(region);
+  T createRequest(String region, [bool changed = false]) {
+    return _searchBar.createRequest(region, changed);
   }
 }

@@ -21,7 +21,7 @@ class RecentUploads extends StatefulWidget {
 
 class _RequestFactory implements RequestFactory<Requests.UploadRecent> {
   @override
-  Requests.UploadRecent createRequest(String region) {
+  Requests.UploadRecent createRequest(String region, [bool changed = false]) {
     return Requests.UploadRecent(region);
   }
 }

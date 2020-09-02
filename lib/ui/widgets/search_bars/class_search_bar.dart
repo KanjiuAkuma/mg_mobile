@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/region/region_bloc.dart';
+import '../../../bloc/region/region_state.dart';
 import '../../../bloc/request/request_bloc.dart';
 import '../../../bloc/request/request_event.dart';
 
@@ -46,7 +47,7 @@ class ClassSearchBar extends SearchBar<Requests.RankingClass> {
   State<StatefulWidget> createState() => _State();
 
   @override
-  Requests.RankingClass createRequest(String region) {
+  Requests.RankingClass createRequest(String region, [bool changed = false]) {
     // boss data might be empty
     if (data.boss == null) return null;
 
@@ -55,7 +56,7 @@ class ClassSearchBar extends SearchBar<Requests.RankingClass> {
       data.clazz,
       Mg.roleFromClass(data.clazz),
       data.boss,
-      data.server,
+      changed ? null : data.server,
       data.multiHeal,
       data.multiTank,
       data.typeTank,
@@ -72,7 +73,7 @@ class ClassSearchBar extends SearchBar<Requests.RankingClass> {
 class _SearchBarData {
   String clazz, server, span;
   Model.Boss boss;
-  int typeTank, typeHeal;
+  int typeHeal, typeTank;
   bool multiHeal, multiTank;
 }
 
@@ -100,116 +101,124 @@ class _State extends State<ClassSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: MgTheme.Background.tabBar,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              // class, server, span
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocConsumer<RegionBloc, RegionState>(
+      listener: (context, state) {
+        // reset data
+        data.server = null;
+      },
+      builder: (context, state) {
+        return Container(
+          color: MgTheme.Background.tabBar,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Dropdown.Clazz(
-                  data.clazz,
-                  (clazz) {
-                    setState(() {
-                      data.clazz = clazz;
-                    });
-                    _maybeSubmit();
-                  },
-                  textAny: 'All classes',
+                Row(
+                  // class, server, span
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Dropdown.Clazz(
+                      data.clazz,
+                      (clazz) {
+                        setState(() {
+                          data.clazz = clazz;
+                        });
+                        _maybeSubmit();
+                      },
+                      textAny: 'All classes',
+                    ),
+                    Dropdown.Server(
+                      data.server,
+                      (server) {
+                        setState(() {
+                          data.server = server;
+                        });
+                        _maybeSubmit();
+                      },
+                      BlocProvider.of<RegionBloc>(context).region,
+                    ),
+                    Dropdown.Span(
+                      data.span,
+                      (span) {
+                        setState(() {
+                          data.span = span;
+                        });
+                        _maybeSubmit();
+                      },
+                    ),
+                  ],
                 ),
-                Dropdown.Server(
-                  data.server,
-                  (server) {
-                    setState(() {
-                      data.server = server;
-                    });
-                    _maybeSubmit();
-                  },
-                  BlocProvider.of<RegionBloc>(context).region,
+                SizedBox(
+                  height: 15,
                 ),
-                Dropdown.Span(
-                  data.span,
-                  (span) {
+                Dropdown.Boss(
+                  data.boss,
+                  (boss) {
                     setState(() {
-                      data.span = span;
-                    });
-                    _maybeSubmit();
-                  },
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Dropdown.Boss(
-              data.boss,
-              (boss) {
-                setState(() {
-                  data.boss = boss;
-                });
-                _maybeSubmit();
-              },
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            // healer type
-            Row(
-              children: [
-                Dropdown.TypeHeal(
-                  data.typeHeal,
-                  (typeHeal) {
-                    setState(() {
-                      data.typeHeal = typeHeal;
+                      data.boss = boss;
                     });
                     _maybeSubmit();
                   },
                 ),
-                Expanded(
-                  child: Container(),
+                SizedBox(
+                  height: 15,
                 ),
-                Checkbox.MultiHeal(
-                  data.multiHeal,
-                  (multiHeal) {
-                    setState(() {
-                      data.multiHeal = multiHeal;
-                    });
-                    _maybeSubmit();
-                  },
+                // healer type
+                Row(
+                  children: [
+                    Dropdown.TypeHeal(
+                      data.typeHeal,
+                      (typeHeal) {
+                        setState(() {
+                          data.typeHeal = typeHeal;
+                        });
+                        _maybeSubmit();
+                      },
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Checkbox.MultiHeal(
+                      data.multiHeal,
+                      (multiHeal) {
+                        setState(() {
+                          data.multiHeal = multiHeal;
+                        });
+                        _maybeSubmit();
+                      },
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                // tank type
+                Row(
+                  children: [
+                    Dropdown.TypeTank(data.typeTank, (typeTank) {
+                      setState(() {
+                        data.typeTank = typeTank;
+                      });
+                      _maybeSubmit();
+                    }),
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Checkbox.MultiTank(data.multiTank, (multiTank) {
+                      setState(() {
+                        data.multiTank = multiTank;
+                      });
+                      _maybeSubmit();
+                    })
+                  ],
                 )
               ],
             ),
-            SizedBox(
-              height: 15,
-            ),
-            // tank type
-            Row(
-              children: [
-                Dropdown.TypeTank(data.typeTank, (typeTank) {
-                  setState(() {
-                    data.typeTank = typeTank;
-                  });
-                  _maybeSubmit();
-                }),
-                Expanded(
-                  child: Container(),
-                ),
-                Checkbox.MultiTank(data.multiTank, (multiTank) {
-                  setState(() {
-                    data.multiTank = multiTank;
-                  });
-                  _maybeSubmit();
-                })
-              ],
-            )
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
