@@ -112,12 +112,12 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
     return BlocConsumer<RegionBloc, RegionState>(
       listener: (context, state) {
         // fetch again, region changed
-        R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region, true);
-        if (request != null) {
-          BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
-        }
+        // R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region, true);
+        // if (request != null) {
+        //   BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
+        // }
       },
-      builder: (context, state) {
+      builder: (context, regionState) {
         return RefreshIndicator(
           color: MgTheme.Foreground.accent,
           backgroundColor: MgTheme.Background.appBar,
@@ -143,15 +143,22 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
               ];
 
               if (state is RequestLoadedState<R>) {
-                if (state.request.shouldRefresh()) {
-                  R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region);
+                _isLoadingIndicatorShowing = false;
+                if (state.request.region != regionState.region) {
+                  slivers.add(buildLoading());
+                  R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region, true);
                   if (request != null) {
                     BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
                   }
+                } else {
+                  if (state.request.shouldRefresh()) {
+                    R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region);
+                    if (request != null) {
+                      BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
+                    }
+                  }
+                  slivers.add(buildLoaded(state.response.data));
                 }
-
-                _isLoadingIndicatorShowing = false;
-                slivers.add(buildLoaded(state.response.data));
               } else if (state is RequestNoneState<R>) {
                 // nothing fetched yet => fetch new
                 R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region);

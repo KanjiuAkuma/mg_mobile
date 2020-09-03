@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/region/region_bloc.dart';
+import '../../../bloc/region/region_state.dart';
 import '../../../bloc/request/request_bloc.dart';
 import '../../../bloc/request/request_event.dart';
 
@@ -90,7 +91,7 @@ class _State extends State<PartySearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer(
+    return BlocConsumer<RegionBloc, RegionState>(
       listener: (context, state) {
         // reset data
         data.server = null;
