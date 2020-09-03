@@ -24,7 +24,7 @@ import '../../base/search_bar.dart';
 class CharacterSearchBar extends SearchBar<Requests.Search> {
   final _SearchBarData data = _SearchBarData();
 
-  CharacterSearchBar(Requests.Search request) {
+  CharacterSearchBar(Requests.Search request) : super(request?.region) {
     if (request != null) {
       data.characterName = request.characterName;
       data.server = request.server;
@@ -42,7 +42,7 @@ class CharacterSearchBar extends SearchBar<Requests.Search> {
   State<StatefulWidget> createState() => _State();
 
   @override
-  Requests.Search createRequest(String region, [bool changed = false]) {
+  Requests.Search createRequest(String region, bool changed) {
     if (changed || data.characterName.isEmpty) return null;
 
     return Requests.Search.fromBoss(
@@ -58,6 +58,12 @@ class CharacterSearchBar extends SearchBar<Requests.Search> {
   @override
   get height {
     return 242;
+  }
+
+  @override
+  void onRegionChanged() {
+    data.characterName = '';
+    data.server = null;
   }
 }
 
@@ -79,18 +85,13 @@ class _State extends State<CharacterSearchBar> {
     if (data.characterName.isNotEmpty) {
       _characterNameNode.unfocus();
       BlocProvider.of<RequestBloc<Requests.Search>>(context)
-          .add(RequestEvent<Requests.Search>(widget.createRequest(BlocProvider.of<RegionBloc>(context).region)));
+          .add(RequestEvent<Requests.Search>(widget.createRequest(BlocProvider.of<RegionBloc>(context).region, false)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegionBloc, RegionState>(
-      listener: (context, state) {
-        // reset data
-        data.characterName = '';
-        data.server = null;
-      },
+    return BlocBuilder<RegionBloc, RegionState>(
       builder: (context, state) {
         return Container(
           color: MgTheme.Background.tabBar,

@@ -24,7 +24,7 @@ import '../../base/search_bar.dart';
 class ClassSearchBar extends SearchBar<Requests.RankingClass> {
   final _SearchBarData data = _SearchBarData();
 
-  ClassSearchBar(Requests.RankingClass request) {
+  ClassSearchBar(Requests.RankingClass request) : super(request?.region) {
     // maybe push data
     if (request != null) {
       data.clazz = request.clazz;
@@ -47,7 +47,7 @@ class ClassSearchBar extends SearchBar<Requests.RankingClass> {
   State<StatefulWidget> createState() => _State();
 
   @override
-  Requests.RankingClass createRequest(String region, [bool changed = false]) {
+  Requests.RankingClass createRequest(String region, bool changed) {
     // boss data might be empty
     if (data.boss == null) return null;
 
@@ -67,6 +67,11 @@ class ClassSearchBar extends SearchBar<Requests.RankingClass> {
   @override
   get height {
     return 267;
+  }
+
+  @override
+  void onRegionChanged() {
+    data.server = null;
   }
 }
 
@@ -101,11 +106,7 @@ class _State extends State<ClassSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegionBloc, RegionState>(
-      listener: (context, state) {
-        // reset data
-        data.server = null;
-      },
+    return BlocBuilder<RegionBloc, RegionState>(
       builder: (context, state) {
         return Container(
           color: MgTheme.Background.tabBar,

@@ -19,7 +19,7 @@ import '../../mg_api/base/mg_request.dart';
 import '../theme.dart' as MgTheme;
 
 abstract class RequestFactory<R extends MgRequest> {
-  R createRequest(String region, [bool changed = false]);
+  R createRequest(String region, bool changed);
 }
 
 abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> extends State<W> {
@@ -123,7 +123,7 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
           backgroundColor: MgTheme.Background.appBar,
           onRefresh: () async {
             _isLoadingIndicatorShowing = true;
-            R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region);
+            R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region, false);
             if (request != null) {
               BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
               return Future<void>(() => _shouldDisposeLoadingIndicator());
@@ -145,14 +145,17 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
               if (state is RequestLoadedState<R>) {
                 _isLoadingIndicatorShowing = false;
                 if (state.request.region != regionState.region) {
-                  slivers.add(buildLoading());
                   R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region, true);
                   if (request != null) {
                     BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
+                    slivers.add(buildLoading());
+                  }
+                  else {
+                    slivers.add(buildLoaded([]));
                   }
                 } else {
                   if (state.request.shouldRefresh()) {
-                    R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region);
+                    R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region, false);
                     if (request != null) {
                       BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
                     }
@@ -161,7 +164,7 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
                 }
               } else if (state is RequestNoneState<R>) {
                 // nothing fetched yet => fetch new
-                R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region);
+                R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region, false);
                 if (request != null) {
                   BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
                   slivers.add(buildLoading());

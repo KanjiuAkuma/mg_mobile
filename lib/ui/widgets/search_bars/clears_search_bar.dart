@@ -23,7 +23,7 @@ import '../../base/search_bar.dart';
 class ClearsSearchBar extends SearchBar<Requests.RankingClears> {
   final _SearchBarData data = _SearchBarData();
 
-  ClearsSearchBar(Requests.RankingClears request) {
+  ClearsSearchBar(Requests.RankingClears request) : super(request?.region) {
     // maybe push data
     if (request != null) {
       data.accountClears = request is Requests.RankingClearsAccount;
@@ -33,7 +33,7 @@ class ClearsSearchBar extends SearchBar<Requests.RankingClears> {
   }
 
   @override
-  Requests.RankingClears createRequest(String region, [bool changed = false]) {
+  Requests.RankingClears createRequest(String region, bool changed) {
     if (data.boss == null) return null;
 
     if (data.accountClears) {
@@ -57,6 +57,11 @@ class ClearsSearchBar extends SearchBar<Requests.RankingClears> {
   @override
   get height {
     return 136;
+  }
+
+  @override
+  void onRegionChanged() {
+    data.server = null;
   }
 }
 
@@ -93,11 +98,7 @@ class _State extends State<ClearsSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegionBloc, RegionState>(
-      listener: (context, state) {
-        // reset data
-        data.server = null;
-      },
+    return BlocBuilder<RegionBloc, RegionState>(
       builder: (context, state) => Container(
         color: MgTheme.Background.tabBar,
         child: Padding(

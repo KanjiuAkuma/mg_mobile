@@ -26,7 +26,7 @@ import '../../base/search_bar.dart';
 class PartySearchBar extends SearchBar<Requests.RankingParty> {
   final _SearchBarData data = _SearchBarData();
 
-  PartySearchBar(Requests.RankingParty request) {
+  PartySearchBar(Requests.RankingParty request) : super(request?.region) {
     if (request != null) {
       data.server = request.server;
       data.span = request.span;
@@ -45,7 +45,7 @@ class PartySearchBar extends SearchBar<Requests.RankingParty> {
   State<StatefulWidget> createState() => _State();
 
   @override
-  Requests.RankingParty createRequest(String region, [bool changed = false]) {
+  Requests.RankingParty createRequest(String region, bool changed) {
     if (data.boss == null) return null;
 
     return Requests.RankingParty.fromBoss(
@@ -61,6 +61,11 @@ class PartySearchBar extends SearchBar<Requests.RankingParty> {
   @override
   get height {
     return 222;
+  }
+
+  @override
+  void onRegionChanged() {
+    data.server = null;
   }
 }
 
@@ -91,11 +96,7 @@ class _State extends State<PartySearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegionBloc, RegionState>(
-      listener: (context, state) {
-        // reset data
-        data.server = null;
-      },
+    return BlocBuilder<RegionBloc, RegionState>(
       builder: (context, state) {
         return Container(
           color: MgTheme.Background.tabBar,
