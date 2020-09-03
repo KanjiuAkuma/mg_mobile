@@ -5,12 +5,13 @@
 const double _updateInterval = 12e4; // 2 minutes
 
 class MgRequest<T> {
+  final String _region;
   final String _apiEndpoint;
   final Map<String, dynamic> _parameters;
   final DateTime _createdAt = DateTime.now();
 
 
-  MgRequest(this._apiEndpoint, this._parameters);
+  MgRequest(this._region, this._apiEndpoint, this._parameters);
 
   /// Hook to modify response json before returning
   List<T> parseResponseJson(List<dynamic> responseJson) {
@@ -19,6 +20,10 @@ class MgRequest<T> {
 
   get createdAt {
     return _createdAt;
+  }
+
+  get region {
+    return _region;
   }
 
   bool shouldRefresh() {
@@ -32,6 +37,6 @@ class MgRequest<T> {
 
   @override
   String toString() {
-    return "Request '${build()}'";
+    return '[${super.toString()}]: ${build()}';
   }
 }

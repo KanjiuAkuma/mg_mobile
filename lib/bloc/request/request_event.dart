@@ -8,4 +8,9 @@ class RequestEvent<T extends MgRequest> {
   final T request;
 
   RequestEvent(this.request);
+
+  @override
+  String toString() {
+    return '[${super.toString()}]: $request';
+  }
 }

@@ -21,7 +21,7 @@ class MGClient {
   final http.Client _httpClient = ioHttp.IOClient(HttpClient()..badCertificateCallback = (_, __, ___) => true);
 
   Future<MGResponse<T>> get<T>(MgRequest<T> request, [int retries = 5]) async {
-    print('MgClient::get($request, retries=$retries)');
+    print('MgClient::get: $request');
     int tries = 0;
     http.Response r;
     var err;

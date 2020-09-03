@@ -13,7 +13,7 @@ class RankingClears<T> extends MgRequest<T> {
 
   RankingClears(String region, int version, String zoneId, String bossId, this.server, bool chars)
       : boss = Model.Boss(version, zoneId, bossId),
-        super(_endpoint, {
+        super(region, _endpoint, {
           'region': region,
           'zone': zoneId,
           'boss': bossId,
@@ -24,7 +24,7 @@ class RankingClears<T> extends MgRequest<T> {
 
   RankingClears.fromBoss(String region, Model.Boss boss, this.server, bool chars) :
       boss = boss,
-      super(_endpoint, {
+      super(region, _endpoint, {
         'region': region,
         'zone': boss.zoneId,
         'boss': boss.bossId,

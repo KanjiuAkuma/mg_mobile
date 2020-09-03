@@ -9,7 +9,7 @@ String _endpoint = 'related_characters';
 
 class RelatedCharacters extends MgRequest<Model.Character> {
   RelatedCharacters(String region, String characterName, [String server])
-      : super(_endpoint, {
+      : super(region, _endpoint, {
           'region': region,
           'name': characterName,
           if (server != null) 'server': server,

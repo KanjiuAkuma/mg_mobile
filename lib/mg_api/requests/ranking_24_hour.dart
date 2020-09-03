@@ -8,7 +8,7 @@ import 'package:mg/models/models.dart' as Model;
 final String _endpoint = 'ranking_24hour';
 
 class Ranking24Hour extends MgRequest<Model.LogCharacter> {
-  Ranking24Hour(String region) : super(_endpoint, {'region': region});
+  Ranking24Hour(String region) : super(region, _endpoint, {'region': region});
 
   @override
   List<Model.LogCharacter> parseResponseJson(List<dynamic> responseJson) {

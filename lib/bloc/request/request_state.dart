@@ -10,6 +10,15 @@ class RequestState<T extends MgRequest> {
   final RequestLoadedState<T> previousComplete;
 
   RequestState(this.request, this.previousComplete);
+
+  @override
+  String toString() {
+    return '[${super.toString()}]: ${request?.build() ?? 'none'}${pretty()}';
+  }
+
+  String pretty() {
+    return '';
+  }
 }
 
 class RequestNoneState<T extends MgRequest> extends RequestState<T> {
@@ -28,10 +37,20 @@ class RequestLoadedState<T extends MgRequest> extends RequestState<T> {
   RequestLoadedState<T> copyWithoutPrevious() {
     return RequestLoadedState<T>(this.response, this.request, null);
   }
+
+  @override
+  String pretty() {
+    return ' -> $response';
+  }
 }
 
 class RequestErrorState<T extends MgRequest> extends RequestState<T> {
   final String error;
 
   RequestErrorState(this.error, T request, RequestLoadedState<T> previousComplete) : super(request, previousComplete);
+
+  @override
+  String pretty() {
+    return ' -> $error';
+  }
 }

@@ -26,7 +26,7 @@ class Search extends MgRequest<Model.LogParty> {
         sortByDps = sortByDps,
         page = page ?? 0,
         previousResults = previousResults ?? [],
-        super(_endpoint, {
+        super(region, _endpoint, {
           'region': region,
           'name': characterName,
           if (page != null) 'page': page,

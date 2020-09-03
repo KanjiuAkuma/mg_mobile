@@ -13,7 +13,7 @@ class RankingParty extends MgRequest<Model.LogParty> {
   final bool multiHeal, multiTank;
 
   RankingParty._(this.region, this.boss, this.server, this.multiHeal, this.multiTank, this.span)
-      : super(_endpoint, {
+      : super(region, _endpoint, {
           'region': region,
           'ver': boss.version,
           'zone': boss.zoneId,

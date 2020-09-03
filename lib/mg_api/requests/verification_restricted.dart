@@ -8,7 +8,7 @@ import 'package:mg/models/models.dart' as Model;
 final String _endpoint = 'verification_restricted';
 
 class VerificationRestricted extends MgRequest<Model.Character> {
-  VerificationRestricted() : super(_endpoint, {});
+  VerificationRestricted() : super('', _endpoint, {});
 
   @override
   List<Model.Character> parseResponseJson(List<dynamic> responseJson) {

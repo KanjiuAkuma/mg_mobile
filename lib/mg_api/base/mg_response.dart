@@ -38,6 +38,6 @@ class MGResponse<T> extends Iterable<T> {
 
   @override
   String toString() {
-    return 'MGResponse $request: $status';
+    return "[Instance of 'MgResponse']: $status";
   }
 }

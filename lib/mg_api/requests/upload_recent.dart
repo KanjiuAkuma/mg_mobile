@@ -8,7 +8,7 @@ import 'package:mg/models/models.dart' as Model;
 final String _endpoint = 'upload_recent';
 
 class UploadRecent extends MgRequest<Model.LogParty> {
-  UploadRecent(String region) : super(_endpoint, {'region': region});
+  UploadRecent(String region) : super(region, _endpoint, {'region': region});
 
   @override
   List<Model.LogParty> parseResponseJson(List<dynamic> responseJson) {

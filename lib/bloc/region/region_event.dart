@@ -6,4 +6,9 @@ class RegionChangedEvent {
   final String region;
 
   RegionChangedEvent(this.region);
+
+  @override
+  String toString() {
+    return '[${super.toString()}]: $region';
+  }
 }

@@ -6,4 +6,9 @@ class RegionState {
   final String region;
 
   RegionState(this.region);
+
+  @override
+  String toString() {
+    return '[${super.toString()}]: $region';
+  }
 }

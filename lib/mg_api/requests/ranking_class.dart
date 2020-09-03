@@ -15,7 +15,7 @@ class RankingClass extends MgRequest<Model.LogCharacter> {
 
   RankingClass._(this.region, this.clazz, this.playerRole, this.boss, this.server, this.multiHeal, this.multiTank,
       this.typeTank, this.typeHeal, this.span)
-      : super(_endpoint, {
+      : super(region, _endpoint, {
           'region': region,
           'role': playerRole,
           if (boss != null) 'ver': boss.version,
