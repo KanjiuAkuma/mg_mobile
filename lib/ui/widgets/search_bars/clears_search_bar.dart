@@ -119,15 +119,30 @@ class _State extends State<ClearsSearchBar> {
               SizedBox(
                 height: 10,
               ),
-              Checkbox.CharacterClears(
-                !data.accountClears,
-                (accountClears) {
-                  setState(() {
-                    data.accountClears = !accountClears;
-                  });
-                  _maybeSubmit();
-                },
-                false,
+              Row(
+                children: [
+                  Dropdown.Server(
+                    data.server,
+                        (server) {
+                      setState(() {
+                        data.server = server;
+                      });
+                      _maybeSubmit();
+                    },
+                    BlocProvider.of<RegionBloc>(context).region,
+                  ),
+                  Expanded(child: Container()),
+                  Checkbox.CharacterClears(
+                    !data.accountClears,
+                        (accountClears) {
+                      setState(() {
+                        data.accountClears = !accountClears;
+                      });
+                      _maybeSubmit();
+                    },
+                    false,
+                  ),
+                ],
               ),
             ],
           ),
