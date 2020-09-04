@@ -18,8 +18,8 @@ Screenshots
 
 ### Home
 
-![Recent Uploads](docs/screenshots/recent_uploads.png "Recent Uploads")
-![Today's Top DPS](docs/screenshots/top_dps.png "Today's Top Dps")
+<img src="docs/screenshots/recent_uploads.png" width="120" alt="">
+<img src="docs/screenshots/top_dps.png" width="120" alt="">
 
 ### Ranking
 
