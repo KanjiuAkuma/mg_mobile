@@ -18,25 +18,25 @@ Screenshots
 
 ### Home
 <p float="left">
-    <img src="docs/screenshots/recent_uploads.png" width="200" alt="Recent uploads">
-    <img src="docs/screenshots/top_dps.png" width="200" alt="Today's Top Dps">
+    <img src="docs/screenshots/recent_uploads.png" width="250" alt="Recent uploads">
+    <img src="docs/screenshots/top_dps.png" width="250" alt="Today's Top Dps">
 </p>
 
 ### Ranking
 
 <p float="left">
-    <img src="docs/screenshots/ranking_clears.png" width="200" alt="Clears">
-    <img src="docs/screenshots/ranking_class.png" width="200" alt="Class">
-    <img src="docs/screenshots/ranking_party.png" width="200" alt="Party">
+    <img src="docs/screenshots/ranking_clears.png" width="250" alt="Clears">
+    <img src="docs/screenshots/ranking_class.png" width="250" alt="Class">
+    <img src="docs/screenshots/ranking_party.png" width="250" alt="Party">
 </p>
 
 ### Search
 
-<img src="docs/screenshots/search.png" width="200" alt="Search">
+<img src="docs/screenshots/search.png" width="250" alt="Search">
 
 Installing
 ===
-Head over [here](https://github.com/KanjiAkuma/mg_mobile/releases/latest) and download the latest release.
+Head over [here](https://github.com/KanjiuAkuma/mg_mobile/releases) and download the latest release.
 
 As the apk is not yet signed your phone might prompt you to enable `Installation of applications not obtained from the Play Store`.
 
