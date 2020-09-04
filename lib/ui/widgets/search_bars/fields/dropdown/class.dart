@@ -15,6 +15,6 @@ class Clazz extends DropdownBase<String> {
           value,
           callback,
           Mg.clazzes.map((e) => DropdownItem(e, e)).toList(),
-          defaultItem: (textAny == null) ? DropdownItem(null, textAny) : null,
+          defaultItem: (textAny != null) ? DropdownItem(null, textAny) : null,
         );
 }
