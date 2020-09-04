@@ -44,7 +44,8 @@ As the apk is not yet signed your phone might prompt you to enable `Installation
 Building it yourself
 ===
 
-Check out the flutter examples or the documentation, which offers tutorials, samples, guidance on mobile development, and a full API reference
+Check out the flutter examples or the documentation, which offers tutorials, samples, guidance on mobile development, 
+and a full API reference if you want to build the app yourself or contribute. 
 
 - [online documentation](https://flutter.dev/docs)
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
