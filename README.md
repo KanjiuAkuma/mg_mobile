@@ -17,19 +17,22 @@ Screenshots
 ===
 
 ### Home
-
-<img src="docs/screenshots/recent_uploads.png" width="120" alt="">
-<img src="docs/screenshots/top_dps.png" width="120" alt="">
+<p float="left">
+    <img src="docs/screenshots/recent_uploads.png" width="200" alt="Recent uploads">
+    <img src="docs/screenshots/top_dps.png" width="200" alt="Today's Top Dps">
+</p>
 
 ### Ranking
 
-![Clears](docs/screenshots/ranking_clears.png "Clears")
-![Class](docs/screenshots/ranking_class.png "Class")
-![Party](docs/screenshots/ranking_party.png "Party")
+<p float="left">
+    <img src="docs/screenshots/ranking_clears.png" width="200" alt="Clears">
+    <img src="docs/screenshots/ranking_class.png" width="200" alt="Class">
+    <img src="docs/screenshots/ranking_party.png" width="200" alt="Party">
+</p>
 
 ### Search
 
-![Search](docs/screenshots/search.png)
+<img src="docs/screenshots/search.png" width="200" alt="Search">
 
 Installing
 ===
