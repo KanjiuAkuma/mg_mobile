@@ -95,11 +95,13 @@ class _PartyCardState extends State<PartyCard> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: log.characters
-                  .map((c) => ImageIcon(
+                  .map((c) {
+                    return ImageIcon(
                         AssetImage('assets/icons/classes/${c.clazz.toLowerCase()}.png'),
                         color: c.color,
                         size: 50,
-                      ))
+                      );
+                  })
                   .toList(),
             ),
           ),

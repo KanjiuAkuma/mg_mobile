@@ -44,4 +44,6 @@ class Text {
   static final TextStyle clears = TextStyle(color: _rgb(255, 151, 151), fontSize: _textSizeNormal);
   static final TextStyle fightDuration = TextStyle(color: _rgb(187, 255, 187), fontSize: _textSizeNormal);
   static final TextStyle uploadTime = TextStyle(color: _rgb(151, 223, 255), fontSize: _textSizeNormal);
+
+  static final TextStyle flair = TextStyle(color: Foreground.global, fontSize: _textSizeNormal);
 }

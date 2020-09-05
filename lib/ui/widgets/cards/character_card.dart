@@ -22,7 +22,8 @@ class CharacterCard extends StatelessWidget {
   final Model.Character _character;
   final int _characterDps;
 
-  const CharacterCard(this._character, this._characterDps, {Key key}) : super(key: key);
+  const CharacterCard(this._character, this._characterDps, {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +31,14 @@ class CharacterCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // search for tapped character
-      if (_character.name.replaceAll('*', '').isNotEmpty) {
-        BlocProvider.of<RequestBloc<Requests.Search>>(context).add(RequestEvent<Requests.Search>(Requests.Search(
-          BlocProvider
-              .of<RegionBloc>(context)
-              .region,
-          _character.name,
-          server: _character.server,
-        )));
-      }
+        if (_character.name.replaceAll('*', '').isNotEmpty) {
+          BlocProvider.of<RequestBloc<Requests.Search>>(context)
+              .add(RequestEvent<Requests.Search>(Requests.Search(
+            BlocProvider.of<RegionBloc>(context).region,
+            _character.name,
+            server: _character.server,
+          )));
+        }
       },
       child: Card(
         color: MgTheme.Background.playerCard,
@@ -53,15 +53,28 @@ class CharacterCard extends StatelessWidget {
                 overflow: Overflow.visible,
                 children: [
                   ImageIcon(
-                    AssetImage('assets/icons/classes/${_character.clazz.toLowerCase()}.png'),
+                    AssetImage(
+                        'assets/icons/classes/${_character.clazz.toLowerCase()}.png'),
                     color: _character.color ?? MgTheme.Foreground.classIcon,
                     size: 40,
                   ),
                   if (_character.flair != null)
                     Positioned(
-                      top: 5,
-                      right: 5,
-                      child: Text(_character.flair),
+                      top: -10,
+                      left: 30,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: MgTheme.Background.global.withOpacity(.8),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                          child: Text(
+                            _character.flair,
+                            style: MgTheme.Text.flair,
+                          ),
+                        ),
+                      ),
                     )
                 ],
               ),
@@ -72,7 +85,8 @@ class CharacterCard extends StatelessWidget {
                 children: [
                   Text(
                     '${_character.name}',
-                    style: MgTheme.Text.normal.copyWith(color: _character.color),
+                    style:
+                        MgTheme.Text.normal.copyWith(color: _character.color),
                   ),
                   SizedBox(
                     height: 10,
