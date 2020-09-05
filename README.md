@@ -36,7 +36,7 @@ Screenshots
 
 Installing
 ===
-Head over [here](https://github.com/KanjiuAkuma/mg_mobile/releases) and download the latest release.
+Head over [here](https://github.com/KanjiuAkuma/mg_mobile/releases) and download `mg_mobile.apk` (found under assets) from the latest release.
 
 As the apk is not yet signed your phone might prompt you to enable `Installation of applications not obtained from the Play Store`.
 
