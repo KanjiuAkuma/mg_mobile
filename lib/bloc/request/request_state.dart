@@ -30,7 +30,7 @@ class RequestLoadingState<T extends MgRequest> extends RequestState<T> {
 }
 
 class RequestLoadedState<T extends MgRequest> extends RequestState<T> {
-  final MGResponse response;
+  final MgResponse response;
 
   RequestLoadedState(this.response, T request, RequestLoadedState<T> previousComplete) : super(request, previousComplete?.copyWithoutPrevious());
 

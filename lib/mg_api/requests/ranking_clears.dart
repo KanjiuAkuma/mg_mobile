@@ -3,11 +3,13 @@
 ///
 
 import '../base/mg_request.dart';
+import '../base/mg_response.dart';
+import '../base/response_status.dart';
 import '../../models/models.dart' as Model;
 
 final String _endpoint = 'ranking_clears';
 
-class RankingClears<T> extends MgRequest<T> {
+abstract class RankingClears<T> extends MgRequest<T> {
   final Model.Boss boss;
   final String server;
 
@@ -43,20 +45,25 @@ class RankingClearsAccount extends RankingClears<Model.RankingAccount> {
     : super.fromBoss(region, boss, server, false);
 
   @override
-  List<Model.RankingAccount> parseResponseJson(List<dynamic> responseJson) {
-    if (0 == responseJson.length) {
+  MgResponse<Model.RankingAccount> buildResponse(ResponseStatus status, String rawResponse, List<dynamic> jsonData) {
+    if (0 == jsonData.length) {
       print('Warning: No results returned for $this');
-      return [];
+      return MgResponse<Model.RankingAccount>(
+        this,
+        status,
+        rawResponse,
+        [],
+      );
     }
 
     List<Model.RankingAccount> ranking = [];
 
     // parse user batches
-    String userId = responseJson[0]['userId'];
-    List<Map<String, dynamic>> entries = [responseJson[0]];
+    String userId = jsonData[0]['userId'];
+    List<Map<String, dynamic>> entries = [jsonData[0]];
 
-    for (int i = 1; i < responseJson.length; i++) {
-      Map<String, dynamic> entry = responseJson[i];
+    for (int i = 1; i < jsonData.length; i++) {
+      Map<String, dynamic> entry = jsonData[i];
 
       if (userId != entry ['userId']) {
         ranking.add(Model.RankingAccount.fromJson(ranking.length + 1, entries));
@@ -64,7 +71,7 @@ class RankingClearsAccount extends RankingClears<Model.RankingAccount> {
         entries = [];
       }
 
-      entries.add(responseJson[i]);
+      entries.add(jsonData[i]);
     }
 
     // append last batch
@@ -72,7 +79,12 @@ class RankingClearsAccount extends RankingClears<Model.RankingAccount> {
       ranking.add(Model.RankingAccount.fromJson(ranking.length + 1, entries));
     }
 
-    return ranking;
+    return MgResponse<Model.RankingAccount>(
+      this,
+      status,
+      rawResponse,
+      ranking,
+    );
   }
 }
 
@@ -85,12 +97,18 @@ class RankingClearsCharacters extends RankingClears<Model.RankingCharacter> {
       : super.fromBoss(region, boss, server, true);
 
   @override
-  List<Model.RankingCharacter> parseResponseJson(List<dynamic> responseJson) {
+  MgResponse<Model.RankingCharacter> buildResponse(ResponseStatus status, String rawResponse, List<dynamic> jsonData) {
     List<Model.RankingCharacter> ranking = [];
-    for (int i = 0; i < responseJson.length; i++) {
-      ranking.add(Model.RankingCharacter.fromJson(i + 1, responseJson[i]));
+    for (int i = 0; i < jsonData.length; i++) {
+      ranking.add(Model.RankingCharacter.fromJson(i + 1, jsonData[i]));
     }
-    return ranking;
+
+    return MgResponse<Model.RankingCharacter>(
+      this,
+      status,
+      rawResponse,
+      ranking,
+    );
   }
 
 }

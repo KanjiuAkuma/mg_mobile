@@ -3,17 +3,19 @@
 ///
 
 import '../base/mg_request.dart';
+import '../base/mg_response.dart';
+import '../base/response_status.dart';
 import 'package:mg/models/models.dart' as Model;
 
 final String _endpoint = 'search';
 
 class Search extends MgRequest<Model.LogParty> {
+
   final Model.Boss boss;
   final String region, characterName, server;
   final bool searchForGuild, sortByDps;
   final int page;
   final List<Model.LogParty> previousResults;
-  bool hasMore;
 
   Search._(String region, String characterName, Model.Boss boss, String server, bool searchForGuild, int page,
       bool sortByDps,
@@ -88,7 +90,6 @@ class Search extends MgRequest<Model.LogParty> {
   }
 
   factory Search.fetchMore(Search previous, List<Model.LogParty> results) {
-    assert(previous.hasMore ?? false, 'Attempting to load more entries but there are none.');
     return Search._(
       previous.region,
       previous.characterName,
@@ -102,21 +103,28 @@ class Search extends MgRequest<Model.LogParty> {
   }
 
   @override
-  List<Model.LogParty> parseResponseJson(List<dynamic> responseJson) {
-    if (0 == responseJson.length || 0 == responseJson[0]['count']) {
+  ExtendableMgResponse<Model.LogParty, Search> buildResponse(ResponseStatus status, String rawResponse, List<dynamic> jsonData) {
+    if (0 == jsonData.length || 0 == jsonData[0]['count']) {
       print('Warning: No results returned for $this');
-      hasMore = false;
-      return [];
+      return ExtendableMgResponse<Model.LogParty, Search>(
+        this,
+        status,
+        rawResponse,
+        [],
+        false,
+        (request, data) => Search.fetchMore(request, data),
+      );
     }
 
-    List<Model.LogParty> logs = previousResults;
+    // copy previousResults
+    List<Model.LogParty> logs = previousResults.sublist(0);
 
-    int totalCount = responseJson[0]['count'];
-    responseJson = responseJson[1];
+    int totalCount = jsonData[0]['count'];
+    jsonData = jsonData[1];
 
     // parse party batches
-    String logId = responseJson[0]['logId'];
-    List<Map<String, dynamic>> entries = [responseJson[0]];
+    String logId = jsonData[0]['logId'];
+    List<Map<String, dynamic>> entries = [jsonData[0]];
 
     Function append;
 
@@ -126,8 +134,8 @@ class Search extends MgRequest<Model.LogParty> {
       append = (e) => logs.add(Model.LogParty.fromJsonAndBoss(boss, e));
     }
 
-    for (int i = 1; i < responseJson.length; i++) {
-      Map<String, dynamic> entry = responseJson[i];
+    for (int i = 1; i < jsonData.length; i++) {
+      Map<String, dynamic> entry = jsonData[i];
 
       if (logId != entry['logId']) {
         append(entries);
@@ -135,7 +143,7 @@ class Search extends MgRequest<Model.LogParty> {
         entries = [];
       }
 
-      entries.add(responseJson[i]);
+      entries.add(jsonData[i]);
     }
 
     // append last batch
@@ -143,7 +151,13 @@ class Search extends MgRequest<Model.LogParty> {
       append(entries);
     }
 
-    hasMore = logs.length < totalCount;
-    return logs;
+    return ExtendableMgResponse<Model.LogParty, Search>(
+      this,
+      status,
+      rawResponse,
+      logs,
+      logs.length < totalCount,
+      (request, data) => Search.fetchMore(request, data)
+    );
   }
 }

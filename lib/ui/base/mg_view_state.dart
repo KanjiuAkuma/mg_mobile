@@ -15,12 +15,15 @@ import '../../bloc/region/region_bloc.dart';
 import '../../bloc/region/region_state.dart';
 
 import '../../mg_api/base/mg_request.dart';
+import '../../mg_api/base/mg_response.dart';
 
 import '../theme.dart' as MgTheme;
 
 abstract class RequestFactory<R extends MgRequest> {
   R createRequest(String region, bool changed);
 }
+
+typedef NextRequestBuilder<R> = R Function();
 
 abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> extends State<W> {
   MgViewState({
@@ -107,16 +110,27 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
     );
   }
 
+  Widget buildLoadedWithMore(List<T> logs, NextRequestBuilder<R> nextRequestBuilder) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+            (context, index) {
+          if (index < logs.length) return buildItem(logs[index], index);
+          BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(nextRequestBuilder()));
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        },
+        childCount: logs.length + 1,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegionBloc, RegionState>(
-      listener: (context, state) {
-        // fetch again, region changed
-        // R request = _requestFactory.createRequest(BlocProvider.of<RegionBloc>(context).region, true);
-        // if (request != null) {
-        //   BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
-        // }
-      },
+    return BlocBuilder<RegionBloc, RegionState>(
       builder: (context, regionState) {
         return RefreshIndicator(
           color: MgTheme.Foreground.accent,
@@ -160,7 +174,13 @@ abstract class MgViewState<W extends StatefulWidget, T, R extends MgRequest<T>> 
                       BlocProvider.of<RequestBloc<R>>(context).add(RequestEvent<R>(request));
                     }
                   }
-                  slivers.add(buildLoaded(state.response.data));
+                  MgResponse response = state.response;
+                  if (response is ExtendableMgResponse<T, R> && response.canFetchMore) {
+                    slivers.add(buildLoadedWithMore(response.data, response.buildNextRequest));
+                  }
+                  else {
+                    slivers.add(buildLoaded(response.data));
+                  }
                 }
               } else if (state is RequestNoneState<R>) {
                 // nothing fetched yet => fetch new

@@ -3,6 +3,8 @@
 ///
 
 import '../base/mg_request.dart';
+import '../base/mg_response.dart';
+import '../base/response_status.dart';
 import 'package:mg/models/models.dart' as Model;
 
 String _endpoint = 'ranking_class';
@@ -65,14 +67,18 @@ class RankingClass extends MgRequest<Model.LogCharacter> {
   }
 
   @override
-  List<Model.LogCharacter> parseResponseJson(List<dynamic> responseJson) {
-    List<Model.LogCharacter> logs = responseJson.map((e) => Model.LogCharacter.fromJsonAndBoss(boss, e)).toList();
-    if (clazz == null) {
-      // no class filter set
-      return logs;
-    } else {
+  MgResponse<Model.LogCharacter> buildResponse(ResponseStatus status, String rawResponse, List<dynamic> jsonData) {
+    List<Model.LogCharacter> logs = jsonData.map((e) => Model.LogCharacter.fromJsonAndBoss(boss, e)).toList();
+    if (clazz != null)  {
       // filter by class
-      return logs.where((l) => l.character.clazz == clazz).toList();
+      logs = logs.where((l) => l.character.clazz == clazz).toList();
     }
+
+    return MgResponse<Model.LogCharacter>(
+      this,
+      status,
+      rawResponse,
+      logs,
+    );
   }
 }

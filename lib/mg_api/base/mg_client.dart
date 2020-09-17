@@ -17,10 +17,10 @@ final String _mgUrl = 'https://kabedon.moongourd.com/api/mg';
 
 /// Client to access mg api
 /// Use [instance] to obtain an instance.
-class MGClient {
+class MgClient {
   final http.Client _httpClient = ioHttp.IOClient(HttpClient()..badCertificateCallback = (_, __, ___) => true);
 
-  Future<MGResponse<T>> get<T>(MgRequest<T> request, [int retries = 5]) async {
+  Future<MgResponse<T>> get<T>(MgRequest<T> request, [int retries = 5]) async {
     print('MgClient::get: $request');
     int tries = 0;
     http.Response r;
@@ -31,12 +31,8 @@ class MGClient {
         if (r.statusCode != 200) {
           throw MgBadResponseCode(r);
         }
-        return MGResponse<T>(
-          request,
-          ResponseStatus.fromHttpResponse(r),
-          r.body,
-          request.parseResponseJson(json.decode(r.body)),
-        );
+
+        return request.buildResponse(ResponseStatus.fromHttpResponse(r), r.body, json.decode(r.body));
       } catch (e) {
         err = e;
       }
@@ -49,7 +45,7 @@ class MGClient {
 
   /* Singleton */
 
-  MGClient._();
+  MgClient._();
 
-  static final MGClient instance = MGClient._();
+  static final MgClient instance = MgClient._();
 }

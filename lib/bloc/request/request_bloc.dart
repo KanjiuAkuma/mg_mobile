@@ -11,7 +11,7 @@ import 'request_event.dart';
 import 'request_state.dart';
 
 class RequestBloc<T extends MgRequest> extends Bloc<RequestEvent<T>, RequestState<T>> {
-  final MGClient client = MGClient.instance;
+  final MgClient client = MgClient.instance;
 
   RequestBloc() : super(RequestNoneState<T>(null));
 

@@ -2,9 +2,12 @@
 /// Created by Kanjiu Akuma on 8/22/2020.
 ///
 
+import 'mg_response.dart';
+import 'response_status.dart';
+
 const double _updateInterval = 12e4; // 2 minutes
 
-class MgRequest<T> {
+abstract class MgRequest<T> {
   final String _region;
   final String _apiEndpoint;
   final Map<String, dynamic> _parameters;
@@ -13,10 +16,15 @@ class MgRequest<T> {
 
   MgRequest(this._region, this._apiEndpoint, this._parameters);
 
-  /// Hook to modify response json before returning
-  List<T> parseResponseJson(List<dynamic> responseJson) {
-    return responseJson;
-  }
+  /// To be implemented.
+  /// Arguments:
+  /// - status: Response status if response succeeded
+  /// - rawResponse: Response body
+  /// - jsonData: Response body as json
+  ///
+  /// Return:
+  /// A [MgResponse] containing the given data
+  MgResponse<T> buildResponse(ResponseStatus status, String rawResponse, List<dynamic> jsonData);
 
   get createdAt {
     return _createdAt;

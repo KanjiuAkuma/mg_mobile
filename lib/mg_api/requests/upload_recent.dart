@@ -3,6 +3,8 @@
 ///
 
 import '../base/mg_request.dart';
+import '../base/mg_response.dart';
+import '../base/response_status.dart';
 import 'package:mg/models/models.dart' as Model;
 
 final String _endpoint = 'upload_recent';
@@ -11,20 +13,25 @@ class UploadRecent extends MgRequest<Model.LogParty> {
   UploadRecent(String region) : super(region, _endpoint, {'region': region});
 
   @override
-  List<Model.LogParty> parseResponseJson(List<dynamic> responseJson) {
-    if (0 == responseJson.length) {
+  MgResponse<Model.LogParty> buildResponse(ResponseStatus status, String rawResponse, List<dynamic> jsonData) {
+    if (0 == jsonData.length) {
       print('Warning: No results returned for $this');
-      return [];
+      return MgResponse<Model.LogParty>(
+        this,
+        status,
+        rawResponse,
+        [],
+      );
     }
 
     List<Model.LogParty> logs = [];
 
     // parse party batches
-    String logId = responseJson[0]['logId'];
-    List<Map<String, dynamic>> entries = [responseJson[0]];
+    String logId = jsonData[0]['logId'];
+    List<Map<String, dynamic>> entries = [jsonData[0]];
 
-    for (int i = 1; i < responseJson.length; i++) {
-      Map<String, dynamic> entry = responseJson[i];
+    for (int i = 1; i < jsonData.length; i++) {
+      Map<String, dynamic> entry = jsonData[i];
 
       if (logId != entry ['logId']) {
         logs.add(Model.LogParty.fromJson(entries));
@@ -32,7 +39,7 @@ class UploadRecent extends MgRequest<Model.LogParty> {
         entries = [];
       }
 
-      entries.add(responseJson[i]);
+      entries.add(jsonData[i]);
     }
 
     // append last batch
@@ -40,7 +47,12 @@ class UploadRecent extends MgRequest<Model.LogParty> {
       logs.add(Model.LogParty.fromJson(entries));
     }
 
-    return logs;
+    return MgResponse<Model.LogParty>(
+      this,
+      status,
+      rawResponse,
+      logs,
+    );
   }
 
 }

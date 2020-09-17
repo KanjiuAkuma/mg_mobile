@@ -3,6 +3,8 @@
 ///
 
 import '../base/mg_request.dart';
+import '../base/mg_response.dart';
+import '../base/response_status.dart';
 import 'package:mg/models/models.dart' as Model;
 
 String _endpoint = 'related_characters';
@@ -19,7 +21,12 @@ class RelatedCharacters extends MgRequest<Model.Character> {
     : this(region, character.name, server);
 
   @override
-  List<Model.Character> parseResponseJson(List<dynamic> responseJson) {
-    return responseJson.map((e) => Model.Character.fromJson(e)).toList();
+  MgResponse<Model.Character> buildResponse(ResponseStatus status, String rawResponse, List<dynamic> jsonData) {
+    return MgResponse<Model.Character>(
+      this,
+      status,
+      rawResponse,
+      jsonData.map((e) => Model.Character.fromJson(e)).toList(),
+    );
   }
 }
